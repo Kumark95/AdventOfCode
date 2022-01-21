@@ -2,5 +2,6 @@
 
 public interface IPuzzleSolver
 {
-    public void Solve();
+    int SolvePartOne(string[] inputLines);
+    int SolvePartTwo(string[] inputLines);
 }

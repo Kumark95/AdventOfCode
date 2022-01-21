@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace AdventOfCode2021.Day1;
+﻿namespace AdventOfCode2021.Day1;
 
 /// <summary>
 /// Puzzle for Day 1.
@@ -8,6 +6,7 @@ namespace AdventOfCode2021.Day1;
 /// </summary>
 public class Day1Solver : IPuzzleSolver
 {
+
     public int CountPreviousLargerItem(int[] input)
     {
         var counter = 0;
@@ -30,7 +29,7 @@ public class Day1Solver : IPuzzleSolver
 
     public int[] SlidingWindow(int[] input, int window)
     {
-        int[] result = new int[input.Length - window + 1];
+        var result = new int[input.Length - window + 1];
         int stopIndex = input.Length - window;
         int? currentSum = null;
         for (int i = 0; i < input.Length; i++)
@@ -57,32 +56,18 @@ public class Day1Solver : IPuzzleSolver
         return result;
     }
 
-    public void Solve()
+    private int[] Input(string[] inputLines) => inputLines
+            .Select(l => int.Parse(l))
+            .ToArray();
+
+    public int SolvePartOne(string[] inputLines)
     {
-        var timer = new Stopwatch();
+        return CountPreviousLargerItem(Input(inputLines));
+    }
 
-        // Parse input
-        var inputFile = Path.Combine(Directory.GetCurrentDirectory(), "Day1", "input.txt");
-        var content = File.ReadAllLines(inputFile);
-        var inputData = content.Select(l => int.Parse(l)).ToArray();
-
-        // Part 1
-        timer.Start();
-
-        Console.WriteLine("Part 1: How many measurements are larger than the previous measurement?");
-        var resultPart1 = CountPreviousLargerItem(inputData);
-
-        timer.Stop();
-        Console.WriteLine($"Answer: {resultPart1} | Took {timer.Elapsed.TotalSeconds} seconds\n");
-
-        //
-        timer.Restart();
-
-        Console.WriteLine("Part 2: Consider sums of a three-measurement sliding window. How many sums are larger than the previous sum?");
-        var slidingWindowInput = SlidingWindow(inputData, window: 3);
-        var resultPart2 = CountPreviousLargerItem(slidingWindowInput);
-
-        timer.Stop();
-        Console.WriteLine($"Answer: {resultPart2} | Took {timer.Elapsed.TotalSeconds} seconds\n");
+    public int SolvePartTwo(string[] inputLines)
+    {
+        var slidingWindowInput = SlidingWindow(Input(inputLines), window: 3);
+        return CountPreviousLargerItem(slidingWindowInput);
     }
 }

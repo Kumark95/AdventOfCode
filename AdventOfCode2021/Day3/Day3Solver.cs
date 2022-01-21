@@ -1,37 +1,17 @@
-﻿using System.Diagnostics;
+﻿namespace AdventOfCode2021.Day3;
 
-namespace AdventOfCode2021.Day3;
-
+/// <summary>
+/// Puzzle for Day 3.
+/// Src: https://adventofcode.com/2021/day/3
+/// </summary>
 public class Day3Solver : IPuzzleSolver
 {
-    private List<string> _testInputData = new()
+    private List<string> Input(string[] inputLines) => inputLines.ToList();
+
+    public int SolvePartOne(string[] inputLines)
     {
-        "00100",
-        "11110",
-        "10110",
-        "10111",
-        "10101",
-        "01111",
-        "00111",
-        "11100",
-        "10000",
-        "11001",
-        "00010",
-        "01010",
-    };
+        var inputData = Input(inputLines);
 
-    public void Solve()
-    {
-        var timer = new Stopwatch();
-
-        // Parse input
-        var inputFile = Path.Combine(Directory.GetCurrentDirectory(), "Day3", "input.txt");
-        var inputData = File.ReadAllLines(inputFile).ToList();
-
-        // Part 1
-        timer.Start();
-
-        Console.WriteLine("Part 1: What is the power consumption of the submarine?");
         var itemLength = inputData[0].Length;
         int[] counter = new int[itemLength];
         foreach (var item in inputData)
@@ -51,17 +31,14 @@ public class Day3Solver : IPuzzleSolver
         var mask = Convert.ToInt32(Math.Pow(2, itemLength) - 1);
         var epsilon = gamma ^ mask; // XOR
 
-        var resultPart1 = gamma * epsilon;
+        return gamma * epsilon;
+    }
 
-        timer.Stop();
-        Console.WriteLine($"Answer: {resultPart1} | Took {timer.Elapsed.TotalSeconds} seconds\n");
+    public int SolvePartTwo(string[] inputLines)
+    {
+        var inputData = Input(inputLines);
 
-        //
-        Console.WriteLine("Part 2: What is the life support rating of the submarine?");
-        // Restart
-        timer.Restart();
-
-        // Search for oxygen generator rating
+        var itemLength = inputData[0].Length;
         var oxigenElements = inputData;
         for (int i = 0; i < itemLength; i++)
         {
@@ -107,9 +84,6 @@ public class Day3Solver : IPuzzleSolver
         }
         var coRating = Convert.ToInt32(coElements[0], 2);
 
-        var resultPart2 = oxigenRating * coRating;
-
-        timer.Stop();
-        Console.WriteLine($"Answer: {resultPart2} | Took {timer.Elapsed.TotalSeconds} seconds\n");
+        return oxigenRating * coRating;
     }
 }

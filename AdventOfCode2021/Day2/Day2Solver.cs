@@ -1,37 +1,29 @@
-﻿using System.Diagnostics;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
 namespace AdventOfCode2021.Day2;
 
 /// <summary>
-/// Puzzle for Day 1.
-/// Src: https://adventofcode.com/2021/day/1
+/// Puzzle for Day 2.
+/// Src: https://adventofcode.com/2021/day/2
 /// </summary>
 public class Day2Solver : IPuzzleSolver
 {
-    private const string Forward = "forward";
-    private const string Up = "up";
-    private const string Down = "down";
+    private readonly Regex _regexExp;
 
-    public void Solve()
+    public Day2Solver()
     {
-        var timer = new Stopwatch();
+        _regexExp = new Regex(@"^(?<Instruction>\w+) (?<Number>\d+)$");
+    }
 
-        // Parse input
-        var inputFile = Path.Combine(Directory.GetCurrentDirectory(), "Day2", "input.txt");
-        var inputData = File.ReadAllLines(inputFile).ToList();
+    private List<string> Input(string[] inputLines) => inputLines.ToList();
 
-        // Part 1
-        timer.Start();
-
-        Console.WriteLine("Part 1: What do you get if you multiply your final horizontal position by your final depth?");
-        var regexExp = new Regex(@"^(?<Instruction>\w+) (?<Number>\d+)$");
-
+    public int SolvePartOne(string[] inputLines)
+    {
         var position = 0;
         var depth = 0;
-        foreach (var line in inputData)
+        foreach (var line in Input(inputLines))
         {
-            var matches = regexExp.Match(line);
+            var matches = _regexExp.Match(line);
             if (!matches.Success)
             {
                 throw new Exception("Could not extract instructions from input line");
@@ -41,15 +33,15 @@ public class Day2Solver : IPuzzleSolver
             var number = int.Parse(matches.Groups["Number"].Value);
             switch (instruction)
             {
-                case Forward:
+                case ShipCommands.Forward:
                     position += number;
                     break;
 
-                case Up:
+                case ShipCommands.Up:
                     depth -= number;
                     break;
 
-                case Down:
+                case ShipCommands.Down:
                     depth += number;
                     break;
 
@@ -58,33 +50,18 @@ public class Day2Solver : IPuzzleSolver
             }
         }
 
-        var resultPart1 = position * depth;
+        return position * depth;
+    }
 
-        timer.Stop();
-        Console.WriteLine($"Answer: {resultPart1} | Took {timer.Elapsed.TotalSeconds} seconds\n");
-
-        //
-        timer.Restart();
-
-        Console.WriteLine("Part 2: What do you get if you multiply your final horizontal position by your final depth?");
-        // Restart
+    public int SolvePartTwo(string[] inputLines)
+    {
         var aim = 0;
-        position = depth = 0;
+        var position = 0;
+        var depth = 0;
 
-
-        //inputData = new List<string>()
-        //{
-        //    "forward 5",
-        //    "down 5",
-        //    "forward 8",
-        //    "up 3",
-        //    "down 8",
-        //    "forward 2"
-        //};
-
-        foreach (var line in inputData)
+        foreach (var line in Input(inputLines))
         {
-            var matches = regexExp.Match(line);
+            var matches = _regexExp.Match(line);
             if (!matches.Success)
             {
                 throw new Exception("Could not extract instructions from input line");
@@ -94,16 +71,16 @@ public class Day2Solver : IPuzzleSolver
             var number = int.Parse(matches.Groups["Number"].Value);
             switch (instruction)
             {
-                case Forward:
+                case ShipCommands.Forward:
                     position += number;
                     depth += (aim * number);
                     break;
 
-                case Up:
+                case ShipCommands.Up:
                     aim -= number;
                     break;
 
-                case Down:
+                case ShipCommands.Down:
                     aim += number;
                     break;
 
@@ -112,9 +89,6 @@ public class Day2Solver : IPuzzleSolver
             }
         }
 
-        var resultPart2 = position * depth;
-
-        timer.Stop();
-        Console.WriteLine($"Answer: {resultPart2} | Took {timer.Elapsed.TotalSeconds} seconds\n");
+        return position * depth;
     }
 }
