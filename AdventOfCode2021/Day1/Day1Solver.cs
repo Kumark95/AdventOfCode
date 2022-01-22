@@ -1,9 +1,12 @@
-﻿namespace AdventOfCode2021.Day1;
+﻿using AdventOfCode2021.Lib;
+
+namespace AdventOfCode2021.Day1;
 
 /// <summary>
 /// Puzzle for Day 1.
 /// Src: https://adventofcode.com/2021/day/1
 /// </summary>
+[PuzzleName("Sonar Sweep")]
 public class Day1Solver : IPuzzleSolver
 {
 

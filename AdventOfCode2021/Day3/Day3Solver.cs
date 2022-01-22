@@ -1,9 +1,9 @@
-﻿namespace AdventOfCode2021.Day3;
+﻿using AdventOfCode2021.Lib;
 
-/// <summary>
-/// Puzzle for Day 3.
-/// Src: https://adventofcode.com/2021/day/3
-/// </summary>
+namespace AdventOfCode2021.Day3;
+
+
+[PuzzleName("Binary Diagnostic")]
 public class Day3Solver : IPuzzleSolver
 {
     private List<string> Input(string[] inputLines) => inputLines.ToList();

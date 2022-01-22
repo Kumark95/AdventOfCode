@@ -4,12 +4,14 @@ using AdventOfCode2021.Day1;
 using AdventOfCode2021.Day2;
 using AdventOfCode2021.Day3;
 using AdventOfCode2021.Day4;
+using AdventOfCode2021.Lib;
 using System.Diagnostics;
+using System.Reflection;
 
 var targetDay = 4;
 
 Console.WriteLine("*************** Advent of Code 2021 ***************");
-Console.WriteLine($"\nSolving day: {targetDay}\n");
+Console.WriteLine($"\nSolving day: {targetDay}");
 
 //
 IPuzzleSolver solver;
@@ -34,6 +36,14 @@ switch (targetDay)
     default:
         throw new Exception("Day not yet solved!");
 }
+
+var puzzleNameAttribute = solver.GetType().GetCustomAttribute<PuzzleName>();
+if (puzzleNameAttribute != null)
+{
+    Console.WriteLine($"Puzzle name: {puzzleNameAttribute.Name}");
+}
+
+Console.WriteLine();
 
 
 // Read inputs

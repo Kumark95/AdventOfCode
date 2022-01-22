@@ -1,5 +1,9 @@
-﻿namespace AdventOfCode2021.Day4;
+﻿using AdventOfCode2021.Lib;
 
+namespace AdventOfCode2021.Day4;
+
+
+[PuzzleName("Giant Squid")]
 public class Day4Solver : IPuzzleSolver
 {
     private (List<int> numbers, List<BingoCard> cards) Input(string[] inputLines)

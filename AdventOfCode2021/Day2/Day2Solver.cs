@@ -1,11 +1,10 @@
-﻿using System.Text.RegularExpressions;
+﻿using AdventOfCode2021.Lib;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode2021.Day2;
 
-/// <summary>
-/// Puzzle for Day 2.
-/// Src: https://adventofcode.com/2021/day/2
-/// </summary>
+
+[PuzzleName("Dive!")]
 public class Day2Solver : IPuzzleSolver
 {
     private readonly Regex _regexExp;
