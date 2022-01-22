@@ -34,7 +34,7 @@ public class Day3Solver : IPuzzleSolver
         return gamma * epsilon;
     }
 
-    public int SolvePartTwo(string[] inputLines)
+    public int? SolvePartTwo(string[] inputLines)
     {
         var inputData = Input(inputLines);
 

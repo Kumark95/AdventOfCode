@@ -53,7 +53,7 @@ public class Day2Solver : IPuzzleSolver
         return position * depth;
     }
 
-    public int SolvePartTwo(string[] inputLines)
+    public int? SolvePartTwo(string[] inputLines)
     {
         var aim = 0;
         var position = 0;

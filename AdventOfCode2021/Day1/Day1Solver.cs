@@ -65,7 +65,7 @@ public class Day1Solver : IPuzzleSolver
         return CountPreviousLargerItem(Input(inputLines));
     }
 
-    public int SolvePartTwo(string[] inputLines)
+    public int? SolvePartTwo(string[] inputLines)
     {
         var slidingWindowInput = SlidingWindow(Input(inputLines), window: 3);
         return CountPreviousLargerItem(slidingWindowInput);

@@ -3,9 +3,10 @@ using AdventOfCode2021;
 using AdventOfCode2021.Day1;
 using AdventOfCode2021.Day2;
 using AdventOfCode2021.Day3;
+using AdventOfCode2021.Day4;
 using System.Diagnostics;
 
-var targetDay = 3;
+var targetDay = 4;
 
 Console.WriteLine("*************** Advent of Code 2021 ***************");
 Console.WriteLine($"\nSolving day: {targetDay}\n");
@@ -24,6 +25,10 @@ switch (targetDay)
 
     case 3:
         solver = new Day3Solver();
+        break;
+
+    case 4:
+        solver = new Day4Solver();
         break;
 
     default:
@@ -62,7 +67,15 @@ foreach (var inputFilename in inputFilenames)
     timer.Restart();
     var resultPartTwo = solver.SolvePartTwo(inputContent);
     timer.Stop();
-    Console.WriteLine($"Part one result: {resultPartTwo} | Took: {timer.Elapsed.TotalSeconds}");
+
+    if (resultPartTwo.HasValue)
+    {
+        Console.WriteLine($"Part two result: {resultPartTwo} | Took: {timer.Elapsed.TotalSeconds}");
+    }
+    else
+    {
+        Console.WriteLine("Part two not yet unlocked");
+    }
 
     Console.WriteLine();
 }
