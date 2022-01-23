@@ -1,14 +1,15 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using AdventOfCode2021;
-using AdventOfCode2021.Day1;
-using AdventOfCode2021.Day2;
-using AdventOfCode2021.Day3;
-using AdventOfCode2021.Day4;
-using AdventOfCode2021.Lib;
+using AdventOfCode.Common.Attributes;
+using AdventOfCode.Common.Interfaces;
+using AdventOfCode.Core.Day1;
+using AdventOfCode.Core.Day2;
+using AdventOfCode.Core.Day3;
+using AdventOfCode.Core.Day4;
+using AdventOfCode.Core.Day5;
 using System.Diagnostics;
 using System.Reflection;
 
-var targetDay = 4;
+var targetDay = 5;
 
 Console.WriteLine("*************** Advent of Code 2021 ***************");
 Console.WriteLine($"\nSolving day: {targetDay}");
@@ -31,6 +32,10 @@ switch (targetDay)
 
     case 4:
         solver = new Day4Solver();
+        break;
+
+    case 5:
+        solver = new Day5Solver();
         break;
 
     default:

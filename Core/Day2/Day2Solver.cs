@@ -1,7 +1,8 @@
-﻿using AdventOfCode2021.Lib;
+﻿using AdventOfCode.Common.Attributes;
+using AdventOfCode.Common.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode2021.Day2;
+namespace AdventOfCode.Core.Day2;
 
 
 [PuzzleName("Dive!")]

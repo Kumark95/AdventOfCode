@@ -1,6 +1,7 @@
-﻿using AdventOfCode2021.Lib;
+﻿using AdventOfCode.Common.Attributes;
+using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode2021.Day3;
+namespace AdventOfCode.Core.Day3;
 
 
 [PuzzleName("Binary Diagnostic")]

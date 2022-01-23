@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2021.Day4;
+﻿namespace AdventOfCode.Core.Day4;
 
 public class BingoCardNumber
 {

@@ -1,6 +1,7 @@
-﻿using AdventOfCode2021.Lib;
+﻿using AdventOfCode.Common.Attributes;
+using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode2021.Day4;
+namespace AdventOfCode.Core.Day4;
 
 
 [PuzzleName("Giant Squid")]
@@ -78,7 +79,7 @@ public class Day4Solver : IPuzzleSolver
             }
         }
 
-        End:
+    End:
 
         if (!lastWinningNumber.HasValue || winningCards.Count == 0)
         {

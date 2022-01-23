@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2021.Day2;
+﻿namespace AdventOfCode.Core.Day2;
 
 public static class ShipCommands
 {

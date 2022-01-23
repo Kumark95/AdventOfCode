@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode2021.Lib;
+﻿namespace AdventOfCode.Common.Attributes;
 
 [AttributeUsage(AttributeTargets.Class)]
 public class PuzzleName : Attribute
