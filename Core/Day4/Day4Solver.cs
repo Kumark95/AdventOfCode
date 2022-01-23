@@ -37,7 +37,7 @@ public class Day4Solver : IPuzzleSolver
         return (numbers, cards);
     }
 
-    public int SolvePartOne(string[] inputLines)
+    public long SolvePartOne(string[] inputLines)
     {
         var (numbers, cards) = Input(inputLines);
 
@@ -55,7 +55,7 @@ public class Day4Solver : IPuzzleSolver
         throw new Exception("No winning card found");
     }
 
-    public int? SolvePartTwo(string[] inputLines)
+    public long? SolvePartTwo(string[] inputLines)
     {
         var (numbers, cards) = Input(inputLines);
 

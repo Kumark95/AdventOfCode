@@ -9,7 +9,7 @@ public class Day3Solver : IPuzzleSolver
 {
     private List<string> Input(string[] inputLines) => inputLines.ToList();
 
-    public int SolvePartOne(string[] inputLines)
+    public long SolvePartOne(string[] inputLines)
     {
         var inputData = Input(inputLines);
 
@@ -35,7 +35,7 @@ public class Day3Solver : IPuzzleSolver
         return gamma * epsilon;
     }
 
-    public int? SolvePartTwo(string[] inputLines)
+    public long? SolvePartTwo(string[] inputLines)
     {
         var inputData = Input(inputLines);
 

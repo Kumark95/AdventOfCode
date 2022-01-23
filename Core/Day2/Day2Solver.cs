@@ -17,7 +17,7 @@ public class Day2Solver : IPuzzleSolver
 
     private List<string> Input(string[] inputLines) => inputLines.ToList();
 
-    public int SolvePartOne(string[] inputLines)
+    public long SolvePartOne(string[] inputLines)
     {
         var position = 0;
         var depth = 0;
@@ -53,7 +53,7 @@ public class Day2Solver : IPuzzleSolver
         return position * depth;
     }
 
-    public int? SolvePartTwo(string[] inputLines)
+    public long? SolvePartTwo(string[] inputLines)
     {
         var aim = 0;
         var position = 0;

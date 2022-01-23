@@ -21,13 +21,13 @@ public class Day5Solver : IPuzzleSolver
             .Select(group => group.Key)
             .ToList();
 
-    public int SolvePartOne(string[] inputLines)
+    public long SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines, excludeDiagonal: true);
         return OverlappingPoints(input).Count();
     }
 
-    public int? SolvePartTwo(string[] inputLines)
+    public long? SolvePartTwo(string[] inputLines)
     {
         var input = Input(inputLines, excludeDiagonal: false);
         return OverlappingPoints(input).Count();

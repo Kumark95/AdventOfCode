@@ -6,7 +6,7 @@ namespace AdventOfCode.Core.Day6;
 [PuzzleName("Lanternfish")]
 public class Day6Solver : IPuzzleSolver
 {
-    public int SolvePartOne(string[] inputLines)
+    public long SolvePartOne(string[] inputLines)
     {
         var fishSchool = new FishSchool(inputLines[0]);
         return fishSchool
@@ -14,7 +14,7 @@ public class Day6Solver : IPuzzleSolver
             .FishCollection.Count;
     }
 
-    public int? SolvePartTwo(string[] inputLines)
+    public long? SolvePartTwo(string[] inputLines)
     {
         return null;
     }

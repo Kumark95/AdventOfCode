@@ -64,12 +64,12 @@ public class Day1Solver : IPuzzleSolver
             .Select(l => int.Parse(l))
             .ToArray();
 
-    public int SolvePartOne(string[] inputLines)
+    public long SolvePartOne(string[] inputLines)
     {
         return CountPreviousLargerItem(Input(inputLines));
     }
 
-    public int? SolvePartTwo(string[] inputLines)
+    public long? SolvePartTwo(string[] inputLines)
     {
         var slidingWindowInput = SlidingWindow(Input(inputLines), window: 3);
         return CountPreviousLargerItem(slidingWindowInput);
