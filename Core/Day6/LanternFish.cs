@@ -2,14 +2,15 @@
 
 public class LanternFish
 {
-    private const int DAYS_TO_REPRODUCE = 6;
-    private const int DAYS_TO_MATURITY = 2;
+    public const int AdultDaysToReproduce = 6;
+    public const int DaysToMaturity = 2;
+    public const int NewbornDaysToReproduce = AdultDaysToReproduce + DaysToMaturity;
 
     public int DaysLeftToReproduce { get; private set; }
 
     public LanternFish()
     {
-        DaysLeftToReproduce = DAYS_TO_REPRODUCE + DAYS_TO_MATURITY;
+        DaysLeftToReproduce = NewbornDaysToReproduce;
     }
 
     public LanternFish(int currentDaysLeft)
@@ -24,17 +25,7 @@ public class LanternFish
         DaysLeftToReproduce--;
         if (DaysLeftToReproduce < 0)
         {
-            DaysLeftToReproduce = DAYS_TO_REPRODUCE;
+            DaysLeftToReproduce = AdultDaysToReproduce;
         }
-    }
-    public LanternFish? TryToReproduce()
-    {
-        if (CanReproduce())
-        {
-
-            return new LanternFish();
-        }
-
-        return null;
     }
 }

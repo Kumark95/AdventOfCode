@@ -2,37 +2,49 @@
 
 public class FishSchool
 {
-    public List<LanternFish> FishCollection { get; private set; } = new List<LanternFish>();
+    private Dictionary<int, long> FishFrequency { get; set; } = new();
 
-    public FishSchool(string initialState)
+    public FishSchool(IEnumerable<int> initialState)
     {
-        Parse(initialState);
+        FishFrequency = initialState
+            .GroupBy(i => i)
+            .ToDictionary(g => Convert.ToInt32(g.Key), l => Convert.ToInt64(l.Count()));
+
+        // Fill missing entries to contain all possible values
+        for (var i = 0; i <= LanternFish.NewbornDaysToReproduce; i++)
+        {
+            FishFrequency.TryAdd<int, long>(i, 0);
+        }
     }
 
-    private void Parse(string initialState)
-    {
-        FishCollection = initialState
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(i => new LanternFish(int.Parse(i)))
-            .ToList();
-    }
+    public long Count() => FishFrequency.Select(g => g.Value).Sum();
 
-    public FishSchool Age(int nDays)
+    public FishSchool SimulateReproduction(int nDays)
     {
         for (int day = 1; day <= nDays; day++)
         {
-            var newbornFishes = new List<LanternFish>();
-            foreach (var fish in FishCollection)
+            // Keep the frequency of each day
+            var currentFrequency = new Dictionary<int, long>(FishFrequency);
+
+            foreach (var (daysLeftToReproduce, counter) in FishFrequency)
             {
+                // Use a fish to simulate the reproduction. This fish represent n = counter
+                var fish = new LanternFish(daysLeftToReproduce);
                 if (fish.CanReproduce())
                 {
-                    newbornFishes.Add(new LanternFish());
+                    // Each fish generates a newborn
+                    currentFrequency[LanternFish.NewbornDaysToReproduce] += counter;
                 }
 
+                // Update the frequency
+                currentFrequency[daysLeftToReproduce] -= counter;
+
                 fish.Age();
+
+                currentFrequency[fish.DaysLeftToReproduce] += counter;
             }
 
-            FishCollection.AddRange(newbornFishes);
+            FishFrequency = new Dictionary<int, long>(currentFrequency);
         }
 
         return this;

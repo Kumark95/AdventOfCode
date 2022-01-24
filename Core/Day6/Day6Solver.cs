@@ -6,16 +6,18 @@ namespace AdventOfCode.Core.Day6;
 [PuzzleName("Lanternfish")]
 public class Day6Solver : IPuzzleSolver
 {
-    public long SolvePartOne(string[] inputLines)
+    private static List<int> Input(string line) => line
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(i => int.Parse(i))
+            .ToList();
+
+    private static long CalculateSchoolSize(string[] inputLines, int days)
     {
-        var fishSchool = new FishSchool(inputLines[0]);
-        return fishSchool
-            .Age(80)
-            .FishCollection.Count;
+        var school = new FishSchool(Input(inputLines[0]));
+        return school.SimulateReproduction(days).Count();
     }
 
-    public long? SolvePartTwo(string[] inputLines)
-    {
-        return null;
-    }
+    public long SolvePartOne(string[] inputLines) => CalculateSchoolSize(inputLines, days: 80);
+
+    public long? SolvePartTwo(string[] inputLines) => CalculateSchoolSize(inputLines, days: 256);
 }
