@@ -4,8 +4,11 @@ using AdventOfCode.Common.Interfaces;
 namespace AdventOfCode.Core.Day7;
 
 [PuzzleName("The Treachery of Whales")]
-public class Day7Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 7;
+
     private static int[] Input(string[] inputLines) => inputLines[0]
             .Split(',', StringSplitOptions.RemoveEmptyEntries)
             .Select(i => int.Parse(i))

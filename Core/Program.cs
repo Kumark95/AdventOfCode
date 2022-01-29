@@ -1,61 +1,30 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
-using AdventOfCode.Core.Day1;
-using AdventOfCode.Core.Day2;
-using AdventOfCode.Core.Day3;
-using AdventOfCode.Core.Day4;
-using AdventOfCode.Core.Day5;
-using AdventOfCode.Core.Day6;
-using AdventOfCode.Core.Day7;
-using AdventOfCode.Core.Day8;
 using System.Diagnostics;
 using System.Reflection;
 
+var targetYear = 2021;
 var targetDay = 8;
 
-Console.WriteLine("*************** Advent of Code 2021 ***************");
+Console.WriteLine($"*************** Advent of Code {targetYear} ***************");
 Console.WriteLine($"\nSolving day: {targetDay}");
 
-//
-IPuzzleSolver solver;
-switch (targetDay)
+
+// Load classes implementing IPuzzleSolver
+List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
+    .Where(t => typeof(IPuzzleSolver).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+    .Select(t => Activator.CreateInstance(t) as IPuzzleSolver)
+    .OfType<IPuzzleSolver>()
+    .ToList();
+
+// Select target solver
+var solver = solvers.FirstOrDefault(s => s.Year == targetYear && s.Day == targetDay);
+if (solver == null)
 {
-    case 1:
-        solver = new Day1Solver();
-        break;
-
-    case 2:
-        solver = new Day2Solver();
-        break;
-
-    case 3:
-        solver = new Day3Solver();
-        break;
-
-    case 4:
-        solver = new Day4Solver();
-        break;
-
-    case 5:
-        solver = new Day5Solver();
-        break;
-
-    case 6:
-        solver = new Day6Solver();
-        break;
-
-    case 7:
-        solver = new Day7Solver();
-        break;
-
-    case 8:
-        solver = new Day8Solver();
-        break;
-
-    default:
-        throw new Exception("Day not yet solved!");
+    throw new Exception($"No solver available for day {targetDay} of year {targetYear}");
 }
+
 
 var puzzleNameAttribute = solver.GetType().GetCustomAttribute<PuzzleName>();
 if (puzzleNameAttribute != null)

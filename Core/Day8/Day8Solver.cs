@@ -6,8 +6,11 @@ namespace AdventOfCode.Core.Day8;
 
 
 [PuzzleName("The Treachery of Whales")]
-public class Day8Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 8;
+
     /*
      * Map the unique segment lengths to the digit value.
      * Key: segment count. Value: digit

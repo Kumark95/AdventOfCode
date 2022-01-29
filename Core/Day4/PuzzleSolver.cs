@@ -5,8 +5,11 @@ namespace AdventOfCode.Core.Day4;
 
 
 [PuzzleName("Giant Squid")]
-public class Day4Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 4;
+
     private (List<int> numbers, List<BingoCard> cards) Input(string[] inputLines)
     {
         var numbers = inputLines[0].Split(',').Select(i => int.Parse(i)).ToList();

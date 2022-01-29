@@ -8,8 +8,10 @@ namespace AdventOfCode.Core.Day1;
 /// Src: https://adventofcode.com/2021/day/1
 /// </summary>
 [PuzzleName("Sonar Sweep")]
-public class Day1Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 1;
 
     public int CountPreviousLargerItem(int[] input)
     {

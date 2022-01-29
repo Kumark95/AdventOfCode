@@ -4,8 +4,11 @@ using AdventOfCode.Common.Interfaces;
 namespace AdventOfCode.Core.Day6;
 
 [PuzzleName("Lanternfish")]
-public class Day6Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 6;
+
     private static List<int> Input(string line) => line
             .Split(',', StringSplitOptions.RemoveEmptyEntries)
             .Select(i => int.Parse(i))

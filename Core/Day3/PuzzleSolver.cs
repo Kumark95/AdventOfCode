@@ -5,8 +5,11 @@ namespace AdventOfCode.Core.Day3;
 
 
 [PuzzleName("Binary Diagnostic")]
-public class Day3Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 3;
+
     private List<string> Input(string[] inputLines) => inputLines.ToList();
 
     public long SolvePartOne(string[] inputLines)

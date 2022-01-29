@@ -8,6 +8,9 @@ namespace AdventOfCode.Core.Day2;
 [PuzzleName("Dive!")]
 public class Day2Solver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 2;
+
     private readonly Regex _regexExp;
 
     public Day2Solver()

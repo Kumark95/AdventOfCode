@@ -4,8 +4,11 @@ using AdventOfCode.Common.Interfaces;
 namespace AdventOfCode.Core.Day5;
 
 [PuzzleName("Hydrothermal Venture")]
-public class Day5Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
+    public int Year => 2021;
+    public int Day => 5;
+
     private List<VentLine> Input(string[] inputLines, bool excludeDiagonal)
     {
         return inputLines
