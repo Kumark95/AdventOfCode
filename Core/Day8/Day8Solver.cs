@@ -4,9 +4,14 @@ using AdventOfCode.Common.Interfaces;
 
 namespace AdventOfCode.Core.Day8;
 
+
 [PuzzleName("The Treachery of Whales")]
 public class Day8Solver : IPuzzleSolver
 {
+    /*
+     * Map the unique segment lengths to the digit value.
+     * Key: segment count. Value: digit
+     */
     private readonly Dictionary<int, int> _uniqueSegmentMappings = new()
     {
         { 2, 1 },
@@ -56,7 +61,7 @@ public class Day8Solver : IPuzzleSolver
         foreach (var displayReading in displayReadings)
         {
             // Build mappings for each character to its correct pattern
-            var mappings = new Dictionary<string, int>();
+            var mappings = new Dictionary<int, string>();
 
             // Order inputs
             var orderedPatterns = displayReading.Patterns
@@ -68,44 +73,18 @@ public class Day8Solver : IPuzzleSolver
             foreach (var segmentLength in _uniqueSegmentMappings)
             {
                 var pattern = orderedPatterns.Single(p => p.Length == segmentLength.Key);
-                mappings[pattern] = segmentLength.Value;
+                mappings[segmentLength.Value] = pattern;
             }
 
-            // 6 segment digits
-            var sixSegmentPatterns = orderedPatterns.Where(p => p.Length == 6).ToList();
+            // 6 segment patterns
+            mappings[9] = orderedPatterns.Single(p => p.Length == 6 && p.ContainsAllChars(mappings[4]));
+            mappings[0] = orderedPatterns.Single(p => p.Length == 6 && p.ContainsAllChars(mappings[7]) && p != mappings[9]);
+            mappings[6] = orderedPatterns.Single(p => p.Length == 6 && p != mappings[9] && p != mappings[0]);
 
-            // (9) shares 3 segments with (4)
-            var ninePattern = sixSegmentPatterns.Single(p => p.ContainsAllChars(mappings.First(m => m.Value == 4).Key));
-            sixSegmentPatterns.Remove(ninePattern);
-            mappings[ninePattern] = 9;
-
-            // (0) shares 3 segments with (7)
-            var zeroPattern = sixSegmentPatterns.Single(p => p.ContainsAllChars(mappings.First(m => m.Value == 7).Key));
-            sixSegmentPatterns.Remove(zeroPattern);
-            mappings[zeroPattern] = 0;
-
-            // (6) is the remaining digit with 6 segments
-            var sixPattern = sixSegmentPatterns.Single(p => p.Length == 6);
-            mappings[sixPattern] = 6;
-
-
-            // 5 digit segments
-            var fiveSegmentPatterns = orderedPatterns.Where(p => p.Length == 5).ToList();
-
-            // (3) shares 3 segments with (7)
-            var threePattern = fiveSegmentPatterns.Single(p => p.ContainsAllChars(mappings.First(m => m.Value == 7).Key));
-            fiveSegmentPatterns.Remove(threePattern);
-            mappings[threePattern] = 3;
-
-            // (5) shares 3 segments with (4)
-            var fivePattern = fiveSegmentPatterns.Single(p => p.ContainsNChars(mappings.First(m => m.Value == 4).Key, 3));
-            fiveSegmentPatterns.Remove(fivePattern);
-            mappings[fivePattern] = 5;
-
-            // (2) is the remaining digit with 5 segments
-            var twoPattern = fiveSegmentPatterns.Single(p => p.Length == 5);
-            mappings[twoPattern] = 2;
-
+            // 5 segment patterns
+            mappings[3] = orderedPatterns.Single(p => p.Length == 5 && p.ContainsAllChars(mappings[7]));
+            mappings[5] = orderedPatterns.Single(p => p.Length == 5 && p.IntersectsWithNChars(mappings[4], 3) && p != mappings[3]);
+            mappings[2] = orderedPatterns.Single(p => p.Length == 5 && p != mappings[5] && p != mappings[3]);
 
             // Decode the output values
             var orderedOutputValues = displayReading.OutputValues
@@ -115,7 +94,9 @@ public class Day8Solver : IPuzzleSolver
             var lineResult = "";
             foreach (var outputValue in orderedOutputValues)
             {
-                lineResult += Convert.ToString(mappings[outputValue]);
+                lineResult += Convert.ToString(
+                        mappings.Single(m => m.Value == outputValue).Key
+                    );
             }
 
             counter += int.Parse(lineResult);
