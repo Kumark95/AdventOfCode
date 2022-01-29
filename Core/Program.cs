@@ -8,10 +8,11 @@ using AdventOfCode.Core.Day4;
 using AdventOfCode.Core.Day5;
 using AdventOfCode.Core.Day6;
 using AdventOfCode.Core.Day7;
+using AdventOfCode.Core.Day8;
 using System.Diagnostics;
 using System.Reflection;
 
-var targetDay = 7;
+var targetDay = 8;
 
 Console.WriteLine("*************** Advent of Code 2021 ***************");
 Console.WriteLine($"\nSolving day: {targetDay}");
@@ -46,6 +47,10 @@ switch (targetDay)
 
     case 7:
         solver = new Day7Solver();
+        break;
+
+    case 8:
+        solver = new Day8Solver();
         break;
 
     default:
