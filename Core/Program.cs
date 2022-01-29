@@ -4,11 +4,21 @@ using AdventOfCode.Common.Interfaces;
 using System.Diagnostics;
 using System.Reflection;
 
-var targetYear = 2021;
-var targetDay = 8;
 
-Console.WriteLine($"*************** Advent of Code {targetYear} ***************");
-Console.WriteLine($"\nSolving day: {targetDay}");
+Console.WriteLine("**********************************************");
+Console.WriteLine("*************** Advent of Code ***************");
+Console.WriteLine("**********************************************");
+Console.WriteLine();
+
+if (args.Length != 2)
+{
+    Console.WriteLine("Usage: dotnet run <Year> <Day>");
+    Environment.Exit(1);
+}
+
+int targetYear = int.Parse(args[0]);
+int targetDay = int.Parse(args[1]);
+Console.WriteLine($"Solving day: {targetDay} of year: {targetYear}");
 
 
 // Load classes implementing IPuzzleSolver
@@ -22,7 +32,9 @@ List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
 var solver = solvers.FirstOrDefault(s => s.Year == targetYear && s.Day == targetDay);
 if (solver == null)
 {
-    throw new Exception($"No solver available for day {targetDay} of year {targetYear}");
+    Console.WriteLine("No solver available");
+    Console.WriteLine();
+    Environment.Exit(1);
 }
 
 
