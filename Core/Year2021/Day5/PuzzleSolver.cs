@@ -1,7 +1,7 @@
 ﻿using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode.Core.Day5;
+namespace AdventOfCode.Core.Year2021.Day5;
 
 [PuzzleName("Hydrothermal Venture")]
 public class PuzzleSolver : IPuzzleSolver

@@ -1,7 +1,7 @@
 ﻿using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode.Core.Day6;
+namespace AdventOfCode.Core.Year2021.Day6;
 
 [PuzzleName("Lanternfish")]
 public class PuzzleSolver : IPuzzleSolver

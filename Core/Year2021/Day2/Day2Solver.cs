@@ -2,7 +2,7 @@
 using AdventOfCode.Common.Interfaces;
 using System.Text.RegularExpressions;
 
-namespace AdventOfCode.Core.Day2;
+namespace AdventOfCode.Core.Year2021.Day2;
 
 
 [PuzzleName("Dive!")]

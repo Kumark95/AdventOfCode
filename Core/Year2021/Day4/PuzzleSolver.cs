@@ -1,7 +1,7 @@
 ﻿using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode.Core.Day4;
+namespace AdventOfCode.Core.Year2021.Day4;
 
 
 [PuzzleName("Giant Squid")]

@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Core.Day5;
+﻿namespace AdventOfCode.Core.Year2021.Day5;
 
 public record Point
 {

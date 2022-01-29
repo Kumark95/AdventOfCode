@@ -45,7 +45,7 @@ var inputFilenames = new List<string>
 // Start
 var timer = new Stopwatch();
 
-var puzzleDir = Path.Combine(Directory.GetCurrentDirectory(), $"Day{targetDay}");
+var puzzleDir = Path.Combine(Directory.GetCurrentDirectory(), $"Year{targetYear}", $"Day{targetDay}");
 foreach (var inputFilename in inputFilenames)
 {
     var inputFile = Path.Combine(puzzleDir, inputFilename);

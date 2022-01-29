@@ -1,7 +1,7 @@
 ﻿using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode.Core.Day7;
+namespace AdventOfCode.Core.Year2021.Day7;
 
 [PuzzleName("The Treachery of Whales")]
 public class PuzzleSolver : IPuzzleSolver

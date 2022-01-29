@@ -2,7 +2,7 @@
 using AdventOfCode.Common.Extensions;
 using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode.Core.Day8;
+namespace AdventOfCode.Core.Year2021.Day8;
 
 
 [PuzzleName("The Treachery of Whales")]

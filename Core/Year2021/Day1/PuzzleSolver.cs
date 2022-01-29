@@ -1,7 +1,7 @@
 ﻿using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 
-namespace AdventOfCode.Core.Day1;
+namespace AdventOfCode.Core.Year2021.Day1;
 
 /// <summary>
 /// Puzzle for Day 1.
