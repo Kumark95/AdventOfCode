@@ -18,8 +18,8 @@ if (args.Length != 2)
 
 int targetYear = int.Parse(args[0]);
 int targetDay = int.Parse(args[1]);
-Console.WriteLine($"Solving day: {targetDay} of year: {targetYear}");
 
+Console.WriteLine($"Solving day {targetDay} of year {targetYear}");
 
 // Load classes implementing IPuzzleSolver
 List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
@@ -29,7 +29,7 @@ List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
     .ToList();
 
 // Select target solver
-var solver = solvers.FirstOrDefault(s => s.Year == targetYear && s.Day == targetDay);
+var solver = solvers.SingleOrDefault(s => s.Year == targetYear && s.Day == targetDay);
 if (solver == null)
 {
     Console.WriteLine("No solver available");
@@ -37,15 +37,13 @@ if (solver == null)
     Environment.Exit(1);
 }
 
-
+//
 var puzzleNameAttribute = solver.GetType().GetCustomAttribute<PuzzleName>();
 if (puzzleNameAttribute != null)
 {
     Console.WriteLine($"Puzzle name: {puzzleNameAttribute.Name}");
 }
-
 Console.WriteLine();
-
 
 // Read inputs
 var inputFilenames = new List<string>
@@ -57,7 +55,7 @@ var inputFilenames = new List<string>
 // Start
 var timer = new Stopwatch();
 
-var puzzleDir = Path.Combine(Directory.GetCurrentDirectory(), $"Year{targetYear}", $"Day{targetDay}");
+var puzzleDir = Path.Combine(Directory.GetCurrentDirectory(), $"Year{targetYear}", $"Day{targetDay:D2}");
 foreach (var inputFilename in inputFilenames)
 {
     var inputFile = Path.Combine(puzzleDir, inputFilename);

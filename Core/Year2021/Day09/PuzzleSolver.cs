@@ -63,8 +63,6 @@ public class PuzzleSolver : IPuzzleSolver
         return result;
     }
 
-
-
     public long? SolvePartTwo(string[] inputLines)
     {
         var input = Input(inputLines);
