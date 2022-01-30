@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using AdventOfCode.Common.Model;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Core.Year2021.Day5;
 

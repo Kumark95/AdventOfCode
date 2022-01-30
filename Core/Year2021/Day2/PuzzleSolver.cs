@@ -6,14 +6,14 @@ namespace AdventOfCode.Core.Year2021.Day2;
 
 
 [PuzzleName("Dive!")]
-public class Day2Solver : IPuzzleSolver
+public class PuzzleSolver : IPuzzleSolver
 {
     public int Year => 2021;
     public int Day => 2;
 
     private readonly Regex _regexExp;
 
-    public Day2Solver()
+    public PuzzleSolver()
     {
         _regexExp = new Regex(@"^(?<Instruction>\w+) (?<Number>\d+)$");
     }

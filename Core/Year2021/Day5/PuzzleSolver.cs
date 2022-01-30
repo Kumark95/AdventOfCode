@@ -1,5 +1,6 @@
 ﻿using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
+using AdventOfCode.Common.Model;
 
 namespace AdventOfCode.Core.Year2021.Day5;
 
