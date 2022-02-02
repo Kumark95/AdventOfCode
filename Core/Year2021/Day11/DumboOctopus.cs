@@ -13,8 +13,10 @@ public class DumboOctopus
         Energy = initialEnergy;
     }
 
-    public void Charge() => Energy++;
+    public void Charge()
+    {
+        Energy = (Energy + 1) % 10;
+    }
 
-    public void Reset() => Energy = 0;
-    public bool IsFlashing() => Energy > 9;
+    public bool IsFlashing() => Energy == 0;
 }

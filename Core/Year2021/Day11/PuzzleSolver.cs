@@ -102,28 +102,14 @@ public class PuzzleSolver : IPuzzleSolver
             }
         }
 
-        // Reset
-        for (int row = 0; row < grid.Length; row++)
-        {
-            for (int col = 0; col < grid[0].Length; col++)
-            {
-                var dumbo = grid[row][col];
-                if (dumbo.IsFlashing())
-                {
-                    dumbo.Reset();
-                }
-            }
-        }
-
         return flashesRecorded;
     }
 
     public long SolvePartOne(string[] inputLines)
     {
-        var result = 0;
-
         var input = Input(inputLines);
 
+        var result = 0;
         var maxSteps = 100;
         for (int step = 1; step <= maxSteps; step++)
         {
