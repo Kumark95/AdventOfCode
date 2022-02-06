@@ -1,32 +1,7 @@
 ﻿namespace AdventOfCode.Core.Year2021.Day12;
 
-//public class Graph
-//{
-//    public HashSet<Cave> Caves { get; private set; }
-//    public List<Path> Paths { get; private set; }
-
-//    public Graph(string[] inputLines)
-//    {
-//        Caves = new HashSet<Cave>();
-//        Paths = new List<Path>();
-
-//        foreach (var line in inputLines)
-//        {
-//            var lineParts = line.Split('-');
-//            var start = new Cave(lineParts[0]);
-//            var end = new Cave(lineParts[1]);
-
-//            Caves.Add(start);
-//            Caves.Add(end);
-
-//            Paths.Add(new Path(start, end));
-//        }
-//    }
-//}
-
 public class Graph
 {
-    //public List<LinkedList<string>> Edges { get; private set; }
     public Dictionary<string, HashSet<string>> Edges { get; private set; }
 
     public Graph()
@@ -39,9 +14,10 @@ public class Graph
         if (Edges.ContainsKey(u))
         {
             Edges[u].Add(v);
-        } else
+        }
+        else
         {
-            Edges.Add(u, new HashSet<string>() { v});
+            Edges.Add(u, new HashSet<string>() { v });
         }
 
 
@@ -53,10 +29,5 @@ public class Graph
         {
             Edges.Add(v, new HashSet<string>() { u });
         }
-
-        //if (Edg.Contains(u))
-        //{
-
-        //}
     }
 }
