@@ -13,11 +13,18 @@ Console.WriteLine();
 if (args.Length != 2)
 {
     Console.WriteLine("Usage: dotnet run <Year> <Day>");
-    Environment.Exit(1);
+
+    // TODO: Activate
+    //Environment.Exit(1);
 }
 
-int targetYear = int.Parse(args[0]);
-int targetDay = int.Parse(args[1]);
+// TODO: Activate
+//int targetYear = int.Parse(args[0]);
+//int targetDay = int.Parse(args[1]);
+
+int targetYear = 2021;
+int targetDay = 12;
+
 
 Console.WriteLine($"Solving day {targetDay} of year {targetYear}");
 
@@ -71,7 +78,7 @@ foreach (var inputFilename in inputFilenames)
     timer.Restart();
     var resultPartOne = solver.SolvePartOne(inputContent);
     timer.Stop();
-    Console.WriteLine($"Part one result: {resultPartOne} | Took: {timer.Elapsed.TotalSeconds}");
+    Console.WriteLine($"Part one result: {resultPartOne} | Took: {timer.Elapsed.TotalMilliseconds}");
 
     timer.Restart();
     var resultPartTwo = solver.SolvePartTwo(inputContent);
@@ -79,7 +86,7 @@ foreach (var inputFilename in inputFilenames)
 
     if (resultPartTwo.HasValue)
     {
-        Console.WriteLine($"Part two result: {resultPartTwo} | Took: {timer.Elapsed.TotalSeconds}");
+        Console.WriteLine($"Part two result: {resultPartTwo} | Took: {timer.Elapsed.TotalMilliseconds}");
     }
     else
     {
