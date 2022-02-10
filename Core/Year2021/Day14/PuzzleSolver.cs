@@ -9,52 +9,72 @@ internal class PuzzleSolver : IPuzzleSolver
     public int Year => 2021;
     public int Day => 14;
 
-    private static (List<string> polymerTemplate, Dictionary<string, string> insertionElements) Input(string[] inputLines)
+    private static (string polymerTemplate, Dictionary<string, string> insertionElements) Input(string[] inputLines)
     {
-        var polymerTemplate = inputLines[0]
-            .ToCharArray()
-            .Select(c => c.ToString())
-            .ToList();
-
         var insertionElements = inputLines
             .Skip(2)
             .ToDictionary(line => line.Split(" -> ")[0], line => line.Split(" -> ")[1]);
 
-        return (polymerTemplate, insertionElements);
+        return (inputLines[0], insertionElements);
     }
 
-    private static long PairInsertion(List<string> polymerTemplate, Dictionary<string, string> insertionElements, int maxSteps)
+    private static long PairInsertion(string polymerTemplate, Dictionary<string, string> insertionElements, int maxSteps)
     {
+        Dictionary<string, long> basePairFrequency = polymerTemplate.Zip(
+                    polymerTemplate.Skip(1),
+                    (first, second) => new string(new[] { first, second })
+                )
+                .GroupBy(p => p)
+                .ToDictionary(p => p.Key, p => Convert.ToInt64(p.Count()));
+
         for (int step = 1; step <= maxSteps; step++)
         {
-            var pairs = polymerTemplate.Zip(
-                    polymerTemplate.Skip(1),
-                    (first, second) => first + second
-                )
-                .ToList();
-
-            var insertionCount = 0;
-            for (int idx = 0; idx < pairs.Count; idx++)
+            var newPairFrequency = new Dictionary<string, long>();
+            foreach (var (basePair, basePairCount) in basePairFrequency)
             {
-                var pair = pairs[idx];
-
-                if (insertionElements.ContainsKey(pair))
+                if (insertionElements.ContainsKey(basePair))
                 {
-                    // Insert between the pair taking into account the previous insertions
-                    polymerTemplate.Insert(idx + insertionCount + 1, insertionElements[pair]);
+                    var pairFirst = basePair[0].ToString();
+                    var pairLast = basePair[1].ToString();
 
-                    insertionCount++;
+                    var elementToInsert = insertionElements[basePair];
+
+                    var newPairs = new List<string> { pairFirst + elementToInsert, elementToInsert + pairLast };
+                    foreach (var newPair in newPairs)
+                    {
+                        if (newPairFrequency.ContainsKey(newPair))
+                        {
+                            newPairFrequency[newPair] += basePairCount;
+                        }
+                        else
+                        {
+                            newPairFrequency.Add(newPair, basePairCount);
+                        }
+                    }
                 }
             }
+
+            basePairFrequency = newPairFrequency;
         }
 
-        // Generate the frequency of each
-        var frequency = polymerTemplate
-            .GroupBy(p => p)
-            .ToList()
-            .ToDictionary(p => p.Key, p => p.Count());
+        // Generate the frequency of each element
+        var elementFrequency = new Dictionary<char, long>();
+        foreach (var (pair, count) in basePairFrequency)
+        {
+            // Only sum the first element of the pair as the second is always duplicated
+            if (!elementFrequency.ContainsKey(pair[0]))
+            {
+                elementFrequency[pair[0]] = count;
+            }
+            else
+            {
+                elementFrequency[pair[0]] += count;
+            }
+        }
+        // The first and last element of the polymer does not change. But needs to add the last to the count
+        elementFrequency[polymerTemplate.Last()]++;
 
-        var frequencyCounts = frequency.Values.ToList();
+        var frequencyCounts = elementFrequency.Values.ToList();
         return frequencyCounts.Max() - frequencyCounts.Min();
     }
 
@@ -67,6 +87,8 @@ internal class PuzzleSolver : IPuzzleSolver
 
     public long? SolvePartTwo(string[] inputLines)
     {
-        return null;
+        var (polymerTemplate, insertionElements) = Input(inputLines);
+
+        return PairInsertion(polymerTemplate, insertionElements, 40);
     }
 }
