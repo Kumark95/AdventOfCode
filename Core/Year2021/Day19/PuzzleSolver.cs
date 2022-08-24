@@ -1,6 +1,6 @@
 ﻿using AdventOfCode.Common.Attributes;
+using AdventOfCode.Common.Extensions;
 using AdventOfCode.Common.Interfaces;
-using AdventOfCode.Common.Model;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Core.Year2021.Day19;
@@ -39,59 +39,22 @@ public class PuzzleSolver : IPuzzleSolver
     public long SolvePartOne(string[] inputLines)
     {
         var scanners = Input(inputLines);
+        var reorientedScanners = Scanner.Reorient(scanners);
 
-        // As all the scanners return relative locations, we can use the first scanner as a reference
-        var firstScanner = scanners.First();
-        var identifiedScanners = new HashSet<Scanner> { scanners.First() };
-        var remainingScanners = scanners.Skip(1).ToList();
-
-        var identifiedBeacons = new HashSet<Point3d>();
-        foreach (var beacon in firstScanner.BeaconCoordinates)
-        {
-            identifiedBeacons.Add(beacon);
-        }
-
-        // The queue contains the scanners used as reference to match other scanners
-        var queue = new Queue<Scanner>();
-        queue.Enqueue(firstScanner);
-
-        while (queue.Count > 0)
-        {
-            var referenceScanner = queue.Dequeue();
-
-            // Compare
-            foreach (var targetScanner in remainingScanners)
-            {
-                if (identifiedScanners.Contains(targetScanner))
-                {
-                    continue;
-                }
-
-                // The reoriented scanner is the same as the target scanner but in the same
-                // coordinate system as the reference scanner
-                var reorientedScanner = targetScanner.ReorientScanner(referenceScanner);
-                if (reorientedScanner != null)
-                {
-                    identifiedScanners.Add(targetScanner);
-
-                    foreach (var reorientedBeacon in reorientedScanner.BeaconCoordinates)
-                    {
-                        identifiedBeacons.Add(reorientedBeacon);
-                    }
-
-                    // The reoriented scanner can now be used as a reference scanner
-                    queue.Enqueue(reorientedScanner);
-                }
-            }
-        }
-
-        return identifiedBeacons.Count;
+        return reorientedScanners
+            .SelectMany(s => s.BeaconCoordinates)
+            .Distinct()
+            .Count();
     }
 
     public long? SolvePartTwo(string[] inputLines)
     {
-        var input = Input(inputLines);
+        var scanners = Input(inputLines);
+        var reorientedScanners = Scanner.Reorient(scanners);
 
-        return null;
+        return reorientedScanners
+            .CombinationsWithoutRepetition(sampleSize: 2)
+            .Select(pair => pair.First().ManhattanDistance(pair.Last()))
+            .Max();
     }
 }
