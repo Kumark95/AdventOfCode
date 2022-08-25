@@ -22,12 +22,6 @@ internal class QuantumGame
         ResultCache = new Dictionary<GameState, QuantumGameResult>();
     }
 
-    private static int ChangePlayerPosition(int initialPosition, int increment)
-    {
-        // Subtract 1 before modulo. Add 1 after as the numbers start from 1 not 0
-        return (initialPosition + increment - 1) % 10 + 1;
-    }
-
     public QuantumGameResult Play(GameState state)
     {
         if (state.WaitingPlayerState.Score >= MaxScore)

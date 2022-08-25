@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace AdventOfCode.Core.Year2021.Day21.Model;
+﻿namespace AdventOfCode.Core.Year2021.Day21.Model;
 
 internal class PracticeGame
 {
