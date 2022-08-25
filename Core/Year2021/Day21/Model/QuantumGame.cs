@@ -2,6 +2,7 @@
 
 internal class QuantumGame
 {
+    public const int BOARD_POSITIONS = 10;
     private int MaxScore { get; init; }
     private Dictionary<GameState, QuantumGameResult> ResultCache { get; set; }
     private readonly Dictionary<int, int> DiracDieResultFrequency = new()
@@ -27,111 +28,39 @@ internal class QuantumGame
         return (initialPosition + increment - 1) % 10 + 1;
     }
 
-    /// <summary>
-    /// Play the game with a given state
-    /// </summary>
-    /// <param name="state"></param>
-    /// <returns>The number of times each player has won</returns>
     public QuantumGameResult Play(GameState state)
     {
+        if (state.WaitingPlayerState.Score >= MaxScore)
+        {
+            return new QuantumGameResult(0, 1);
+        }
+
         if (ResultCache.ContainsKey(state))
         {
             return ResultCache[state];
         }
 
-        long player1Victories = 0;
-        long player2Victories = 0;
+        long activePLayerVictories = 0;
+        long waitingPlayerVictories = 0;
 
-        // TODO: Refactor
-        if (state.IsPlayer1Turn)
+        foreach (var (positionIncrease, resultFrequency) in DiracDieResultFrequency)
         {
-            foreach (var (positionIncrease, dieResultFrequency) in DiracDieResultFrequency)
+            // The roles are switched for the next turn
+            var newResult = Play(new GameState
             {
-                var landingPosition = ChangePlayerPosition(state.PlayerAPosition, positionIncrease);
-                var playerNewScore = state.PlayerAScore + landingPosition;
+                ActivePlayerState = state.WaitingPlayerState,
+                WaitingPlayerState = state.ActivePlayerState.MovePosition(positionIncrease),
+            });
 
-                var newGameState = state with
-                {
-                    PlayerAPosition = landingPosition,
-                    PlayerAScore = playerNewScore,
-                    IsPlayer1Turn = false,
-                };
-
-                QuantumGameResult newStateResults;
-                if (ResultCache.ContainsKey(newGameState))
-                {
-                    var intermediateResults = ResultCache[newGameState];
-                    newStateResults = intermediateResults with
-                    {
-                        PlayerAVictories = intermediateResults.PlayerAVictories * dieResultFrequency,
-                        PlayerBVictories = intermediateResults.PlayerBVictories * dieResultFrequency
-                    };
-                }
-                else if (playerNewScore >= MaxScore)
-                {
-                    newStateResults = new QuantumGameResult(PlayerAVictories: dieResultFrequency, PlayerBVictories: 0);
-                }
-                else
-                {
-                    var intermediateResults = Play(newGameState);
-                    newStateResults = intermediateResults with
-                    {
-                        PlayerAVictories = intermediateResults.PlayerAVictories * dieResultFrequency,
-                        PlayerBVictories = intermediateResults.PlayerBVictories * dieResultFrequency
-                    };
-                }
-
-                player1Victories += newStateResults.PlayerAVictories;
-                player2Victories += newStateResults.PlayerBVictories;
-            }
-        }
-        else
-        {
-            foreach (var (positionIncrease, dieResultFrequency) in DiracDieResultFrequency)
-            {
-                var landingPosition = ChangePlayerPosition(state.PlayerBPosition, positionIncrease);
-                var playerNewScore = state.PlayerBScore + landingPosition;
-
-                var newGameState = state with
-                {
-                    PlayerBPosition = landingPosition,
-                    PlayerBScore = playerNewScore,
-                    IsPlayer1Turn = true,
-                };
-
-                QuantumGameResult newStateResults;
-                if (ResultCache.ContainsKey(newGameState))
-                {
-                    var intermediateResults = ResultCache[newGameState];
-                    newStateResults = intermediateResults with
-                    {
-                        PlayerAVictories = intermediateResults.PlayerAVictories * dieResultFrequency,
-                        PlayerBVictories = intermediateResults.PlayerBVictories * dieResultFrequency
-                    };
-                }
-                else if (playerNewScore >= MaxScore)
-                {
-                    newStateResults = new QuantumGameResult(PlayerAVictories: 0, PlayerBVictories: dieResultFrequency);
-                }
-                else
-                {
-                    var intermediateResults = Play(newGameState);
-                    newStateResults = intermediateResults with
-                    {
-                        PlayerAVictories = intermediateResults.PlayerAVictories * dieResultFrequency,
-                        PlayerBVictories = intermediateResults.PlayerBVictories * dieResultFrequency
-                    };
-                }
-
-                player1Victories += newStateResults.PlayerAVictories;
-                player2Victories += newStateResults.PlayerBVictories;
-            }
+            // The returning victories also need to be swapped
+            activePLayerVictories += (newResult.WaitingPlayerVictories * resultFrequency);
+            waitingPlayerVictories += (newResult.ActivePlayerVictories * resultFrequency);
         }
 
         var result = new QuantumGameResult
         {
-            PlayerAVictories = player1Victories,
-            PlayerBVictories = player2Victories
+            ActivePlayerVictories = activePLayerVictories,
+            WaitingPlayerVictories = waitingPlayerVictories
         };
 
         ResultCache.Add(state, result);
@@ -139,14 +68,5 @@ internal class QuantumGame
     }
 }
 
+internal record struct QuantumGameResult(long ActivePlayerVictories, long WaitingPlayerVictories);
 
-internal record struct GameState
-{
-    public int PlayerAPosition { get; init; }
-    public int PlayerAScore { get; init; }
-    public int PlayerBPosition { get; init; }
-    public int PlayerBScore { get; init; }
-    public bool IsPlayer1Turn { get; init; }
-}
-
-internal record struct QuantumGameResult(long PlayerAVictories, long PlayerBVictories);
