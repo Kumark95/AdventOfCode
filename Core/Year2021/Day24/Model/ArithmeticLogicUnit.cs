@@ -4,30 +4,6 @@ namespace AdventOfCode.Core.Year2021.Day24.Model;
 
 internal class ArithmeticLogicUnit
 {
-    private Dictionary<string, int> Registers { get; init; }
-
-    public ArithmeticLogicUnit()
-    {
-        Registers = new Dictionary<string, int>
-        {
-            { "w", 0 },
-            { "x", 0 },
-            { "y", 0 },
-            { "z", 0 }
-        };
-    }
-
-    [Obsolete]
-    private class Operation
-    {
-        public const string Input = "inp";
-        public const string Addition = "add";
-        public const string Multiplication = "mul";
-        public const string Division = "div";
-        public const string Modulo = "mod";
-        public const string Equality = "eql";
-    }
-
     /// <summary>
     /// Run the instruction group
     /// </summary>
@@ -180,78 +156,6 @@ add z y");
         }
 
         return instructionValues;
-    }
-
-    [Obsolete]
-    public bool Validate(string[] instructions, long modelNumber)
-    {
-        // Extract each individual digit
-        var inputValues = modelNumber.ToString()
-            .Select(i => int.Parse(i.ToString()))
-            .ToList();
-
-        var inputPosition = 0;
-        var regex = new Regex(@"(?<Operation>\w{3}) (?<Left>w|x|y|z) ?(?<Right>w|x|y|z|-?\d+)?");
-        foreach (var instruction in instructions)
-        {
-            var matches = regex.Match(instruction);
-            if (!matches.Success)
-            {
-                throw new Exception("Could not parse the instruction correctly.");
-            }
-
-            var operation = matches.Groups["Operation"].Value;
-            var leftOperand = matches.Groups["Left"].Value;
-            var rightOperand = matches.Groups["Right"].Value;
-            var isRightNumeric = int.TryParse(rightOperand, out var rightValue);
-            if (!isRightNumeric && !string.IsNullOrEmpty(rightOperand))
-            {
-                rightValue = Registers[rightOperand];
-            }
-
-            switch (operation)
-            {
-                case Operation.Input:
-                    Registers[leftOperand] = inputValues[inputPosition];
-
-                    inputPosition++;
-                    break;
-
-                case Operation.Addition:
-                    Registers[leftOperand] = Registers[leftOperand] + rightValue;
-                    break;
-
-                case Operation.Multiplication:
-                    Registers[leftOperand] = Registers[leftOperand] * rightValue;
-                    break;
-
-                case Operation.Division:
-                    if (rightValue == 0)
-                    {
-                        return false;
-                    }
-                    Registers[leftOperand] = Registers[leftOperand] / rightValue;
-                    break;
-
-                case Operation.Modulo:
-                    if (Registers[leftOperand] < 0 || rightValue <= 0)
-                    {
-                        return false;
-                    }
-                    Registers[leftOperand] = Registers[leftOperand] % rightValue;
-                    break;
-
-                case Operation.Equality:
-                    Registers[leftOperand] = Registers[leftOperand] == rightValue ? 1 : 0;
-                    break;
-
-                default:
-                    throw new Exception("Not a valid operation: " + operation);
-            }
-        }
-
-        // The final result is always stored in the Z register
-        return Registers["z"] == 0;
     }
 }
 
