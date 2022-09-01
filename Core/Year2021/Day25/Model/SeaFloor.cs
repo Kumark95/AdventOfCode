@@ -8,9 +8,6 @@ internal class SeaFloor
     private int FloorRowLength { get; init; }
     private int FloorColLength { get; init; }
 
-    private List<MatrixPosition> EastCucumberPositions { get; set; }
-    private List<MatrixPosition> SouthCucumberPositions { get; set; }
-
     private const char EastCucumber = '>';
     private const char SouthCucumber = 'v';
     private const char Empty = '.';
@@ -21,26 +18,13 @@ internal class SeaFloor
         FloorColLength = inputLines[0].Length;
         Map = new char[FloorRowLength, FloorColLength];
 
-        EastCucumberPositions = new List<MatrixPosition>();
-        SouthCucumberPositions = new List<MatrixPosition>();
-
         for (int row = 0; row < FloorRowLength; row++)
         {
             var line = inputLines[row];
 
             for (int col = 0; col < FloorColLength; col++)
             {
-                var character = line[col];
-                Map[row, col] = character;
-
-                if (character == EastCucumber)
-                {
-                    EastCucumberPositions.Add(new MatrixPosition(row, col));
-                }
-                else if (character == SouthCucumber)
-                {
-                    SouthCucumberPositions.Add(new MatrixPosition(row, col));
-                }
+                Map[row, col] = line[col];
             }
         }
     }
@@ -57,59 +41,8 @@ internal class SeaFloor
         {
             steps++;
 
-            var hasMovement = false;
-
-            // Need a snapshot of the map as the movement check needs to be performed simultaneously
-            var mapSnapshot = (char[,])Map.Clone();
-
-            // The east cucumber herd have priority
-            // TODO: Optimize
-            var currentEastCucumbers = EastCucumberPositions
-                .OrderByDescending(c => c.Row)
-                    .ThenBy(c => c.Col)
-                .ToList();
-
-            foreach (var currentPosition in currentEastCucumbers)
-            {
-                var (canMove, newPosition) = TryToMove(currentPosition, mapSnapshot);
-                if (!canMove)
-                {
-                    continue;
-                }
-
-                hasMovement = true;
-                Map[currentPosition.Row, currentPosition.Col] = Empty;
-                Map[newPosition.Value.Row, newPosition.Value.Col] = EastCucumber;
-
-                EastCucumberPositions.Remove(currentPosition);
-                EastCucumberPositions.Add(newPosition.Value);
-            }
-
-            // South cucumbers
-            mapSnapshot = (char[,])Map.Clone();
-
-            var currentSouthCucumbers = SouthCucumberPositions
-                .OrderByDescending(c => c.Row)
-                    .ThenBy(c => c.Col)
-                .ToList();
-
-            foreach (var currentPosition in currentSouthCucumbers)
-            {
-                var (canMove, newPosition) = TryToMove(currentPosition, mapSnapshot);
-                if (!canMove)
-                {
-                    continue;
-                }
-
-                hasMovement = true;
-                Map[currentPosition.Row, currentPosition.Col] = Empty;
-                Map[newPosition.Value.Row, newPosition.Value.Col] = SouthCucumber;
-
-                SouthCucumberPositions.Remove(currentPosition);
-                SouthCucumberPositions.Add(newPosition.Value);
-            }
-
-            if (!hasMovement)
+            var movedCucumbers = MoveEastHerd() + MoveSouthHerd();
+            if (movedCucumbers == 0)
             {
                 break;
             }
@@ -119,28 +52,107 @@ internal class SeaFloor
     }
 
     /// <summary>
-    /// Tries to move to the next position
+    /// Move the east-facing herd of cucumbers
     /// </summary>
-    /// <param name="initialPosition"></param>
-    /// <param name="map"></param>
     /// <returns></returns>
-    /// <remarks>
-    /// The position depends on the type of cucumber
-    /// </remarks>
-    /// <exception cref="Exception"></exception>
-    public (bool result, MatrixPosition? newPosition) TryToMove(MatrixPosition initialPosition, char[,] map)
+    private int MoveEastHerd()
     {
-        var cucumber = map[initialPosition.Row, initialPosition.Col];
+        var movedCucumbers = 0;
 
-        var targetPosition = cucumber switch
+        for (int row = 0; row < FloorRowLength; row++)
         {
-            EastCucumber => initialPosition with { Col = (initialPosition.Col + 1) % FloorColLength },
-            SouthCucumber => initialPosition with { Row = (initialPosition.Row + 1) % FloorRowLength },
-            _ => throw new Exception("Not a cucumber")
-        };
+            // Used to check the original value when a wrap around happens
+            var wrappedOriginalValue = Map[row, 0];
 
-        var canMove = map[targetPosition.Row, targetPosition.Col] == Empty;
-        return (canMove, canMove ? targetPosition : null);
+            for (int col = 0; col < FloorColLength; col++)
+            {
+                var value = Map[row, col];
+                if (value != EastCucumber)
+                {
+                    continue;
+                }
+
+                var targetPosition = CalculateTargetPosition(row, col, isFromEast: true);
+                var targetValue = Map[targetPosition.Row, targetPosition.Col];
+                if (targetValue == Empty)
+                {
+                    if (targetPosition.Col == 0 && wrappedOriginalValue != Empty)
+                    {
+                        continue;
+                    }
+
+                    Map[row, col] = Empty;
+                    Map[targetPosition.Row, targetPosition.Col] = EastCucumber;
+
+                    col++; // Skip the newly moved cucumber
+
+                    movedCucumbers++;
+                }
+            }
+        }
+
+        return movedCucumbers;
+    }
+
+    /// <summary>
+    /// Move the south-facing herd of cucumbers
+    /// </summary>
+    /// <returns></returns>
+    private int MoveSouthHerd()
+    {
+        var movedCucumbers = 0;
+
+        // Iterate with columns first (following the herd direction)
+        for (int col = 0; col < FloorColLength; col++)
+        {
+            // Used to check the original value when a wrap around happens
+            var wrappedOriginalValue = Map[0, col];
+
+            for (int row = 0; row < FloorRowLength; row++)
+            {
+                var value = Map[row, col];
+                if (value != SouthCucumber)
+                {
+                    continue;
+                }
+
+                var targetPosition = CalculateTargetPosition(row, col, isFromEast: false);
+                var targetValue = Map[targetPosition.Row, targetPosition.Col];
+                if (targetValue == Empty)
+                {
+                    if (targetPosition.Row == 0 && wrappedOriginalValue != Empty)
+                    {
+                        continue;
+                    }
+
+                    Map[row, col] = Empty;
+                    Map[targetPosition.Row, targetPosition.Col] = SouthCucumber;
+
+                    row++; // Skip the newly moved cucumber
+
+                    movedCucumbers++;
+                }
+            }
+        }
+
+        return movedCucumbers;
+    }
+
+    /// <summary>
+    /// Calculates the target position
+    /// </summary>
+    /// <param name="row"></param>
+    /// <param name="col"></param>
+    /// <param name="isFromEast"></param>
+    /// <remarks>
+    /// Wraps around the bound of the map
+    /// </remarks>
+    /// <returns></returns>
+    private MatrixPosition CalculateTargetPosition(int row, int col, bool isFromEast)
+    {
+        return isFromEast
+            ? new MatrixPosition(row, (col + 1) % FloorColLength)
+            : new MatrixPosition((row + 1) % FloorRowLength, col);
     }
 }
 
