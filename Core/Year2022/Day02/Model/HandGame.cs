@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace AdventOfCode.Core.Year2022.Day02.Model;
 
 internal class HandGame
@@ -34,7 +36,7 @@ internal class HandGame
         {
             DecryptionStrategy.UserSelection => DecryptExpectedUserShape(oponentShape, message),
             DecryptionStrategy.RoundResult => DecryptExpectedRoundResult(oponentShape, message),
-            _ => throw new ArgumentOutOfRangeException("Invalid strategy")
+            _ => throw new UnreachableException("Invalid strategy")
         };
     }
 
@@ -45,7 +47,7 @@ internal class HandGame
             'X' => HandShape.Rock,
             'Y' => HandShape.Paper,
             'Z' => HandShape.Scissors,
-            _ => throw new ArgumentOutOfRangeException("Invalid option")
+            _ => throw new UnreachableException("Invalid option")
         };
     }
 
@@ -56,7 +58,7 @@ internal class HandGame
             'X' => PickLosingShape(oponentShape),
             'Y' => PickDrawingShape(oponentShape),
             'Z' => PickWinningShape(oponentShape),
-            _ => throw new ArgumentOutOfRangeException("Invalid option")
+            _ => throw new UnreachableException("Invalid option")
         };
     }
 
@@ -67,7 +69,7 @@ internal class HandGame
             HandShape.Rock => HandShape.Scissors,
             HandShape.Paper => HandShape.Rock,
             HandShape.Scissors => HandShape.Paper,
-            _ => throw new ArgumentOutOfRangeException("Invalid option")
+            _ => throw new UnreachableException("Invalid option")
         };
     }
 
@@ -83,7 +85,7 @@ internal class HandGame
             HandShape.Rock => HandShape.Paper,
             HandShape.Paper => HandShape.Scissors,
             HandShape.Scissors => HandShape.Rock,
-            _ => throw new ArgumentOutOfRangeException("Invalid option")
+            _ => throw new UnreachableException("Invalid option")
         };
     }
 }

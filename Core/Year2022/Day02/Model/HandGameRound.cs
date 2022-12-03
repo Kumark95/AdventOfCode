@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace AdventOfCode.Core.Year2022.Day02.Model;
 
 internal class HandGameRound
@@ -23,7 +25,7 @@ internal class HandGameRound
             HandShape.Rock => 1,
             HandShape.Paper => 2,
             HandShape.Scissors => 3,
-            _ => throw new ArgumentOutOfRangeException("Invalid option")
+            _ => throw new UnreachableException("Invalid option")
         };
     }
 
