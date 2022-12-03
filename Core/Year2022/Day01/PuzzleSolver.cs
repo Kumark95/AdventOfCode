@@ -1,4 +1,4 @@
-﻿using AdventOfCode.Common.Attributes;
+using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 
 namespace AdventOfCode.Core.Year2022.Day01;
@@ -8,7 +8,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 1;
 
-    private IEnumerable<int> CalculateCalorieSum(string[] inputLines)
+    private static IEnumerable<int> CalculateCalorieSum(string[] inputLines)
     {
         var list = new List<int>();
         var currentSum = 0;
