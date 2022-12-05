@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Common.Interfaces;
+namespace AdventOfCode.Common.Interfaces;
 
 public interface IPuzzleSolver
 {
