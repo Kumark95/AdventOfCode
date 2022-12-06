@@ -1,5 +1,6 @@
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
+using AdventOfCode.Core.Year2022.Day05.Model;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Core.Year2022.Day05;
