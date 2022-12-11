@@ -7,6 +7,10 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
+	<PropertyGroup>
+	  <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Content Include="Year*\Day*\*.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
