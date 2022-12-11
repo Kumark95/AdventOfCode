@@ -4,7 +4,7 @@ Advent of Code (<https://adventofcode.com>) is an Advent calendar of small progr
 This repo contains my own solutions using C#
 
 ## Requirements
-.Net 6.0
+.Net 7.0
 
 ## Usage
 ```csharp
