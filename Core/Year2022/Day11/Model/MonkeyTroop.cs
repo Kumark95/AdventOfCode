@@ -13,18 +13,27 @@ internal class MonkeyTroop
 
     public static MonkeyTroop Parse(string[] propertyLines)
     {
-        var monkeys = new List<Monkey>();
+        var troop = new List<Monkey>();
 
         var index = 0;
+        var divisorList = new List<int>();
         while (index < propertyLines.Length)
         {
             var monkeyProperties = propertyLines.Skip(index).Take(6).ToArray();
-            monkeys.Add(Monkey.Parse(monkeyProperties));
+            var monkey = Monkey.Parse(monkeyProperties);
+            troop.Add(monkey);
+            divisorList.Add(monkey.GetTestDivisor());
 
             index += 7;
         }
 
-        return new MonkeyTroop(monkeys);
+        var commonDivisor = divisorList.Aggregate((a, b) => a * b);
+        foreach (var monkey in troop)
+        {
+            monkey.SetTroopCommonDivisor(commonDivisor);
+        }
+
+        return new MonkeyTroop(troop);
     }
 
     public void PlayRounds(int rounds, bool isWorryReliefActivated)
@@ -52,7 +61,7 @@ internal class MonkeyTroop
         {
             while (monkey.HasItems())
             {
-                (long newItem, int nextMonkeyPosition) = monkey.Play(isWorryReliefActivated);
+                (var newItem, var nextMonkeyPosition) = monkey.Play(isWorryReliefActivated);
                 var nextMonkey = Troop[nextMonkeyPosition];
                 nextMonkey.AddItem(newItem);
             }

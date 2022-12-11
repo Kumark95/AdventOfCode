@@ -6,9 +6,10 @@ internal class Monkey
 {
     public long InspectionCounter { get; private set; }
 
-    private Queue<long> Items { get; init; }
+    private Queue<long> WorryLevelItems { get; init; }
     private Func<long, long> InspectionMethod { get; init; }
     private int Divisor { get; init; }
+    private int CommonDivisor { get; set; }
     private int PositiveConditionNextMonkeyPosition { get; init; }
     private int NegativeConditionNextMonkeyPosition { get; init; }
 
@@ -16,40 +17,58 @@ internal class Monkey
     {
         InspectionCounter = 0;
 
-        Items = items;
+        WorryLevelItems = items;
         InspectionMethod = inspectionOperation;
         Divisor = divisor;
         PositiveConditionNextMonkeyPosition = positiveConditionNextMonkey;
         NegativeConditionNextMonkeyPosition = negativeConditionNextMonkey;
     }
 
-    public (long newItem, int nextMonkeyPosition) Play(bool isWorryReliefActivated)
+    public (long newWorryLevel, int nextMonkeyPosition) Play(bool isWorryReliefActivated)
     {
-        var currentItem = Items.Dequeue();
-
-        var newItem = isWorryReliefActivated
-            ? (long)Math.Floor(InspectionMethod(currentItem) / 3.0)
-            : InspectionMethod(currentItem);
         InspectionCounter++;
 
-        if (newItem % Divisor == 0)
+        var worryLevel = WorryLevelItems.Dequeue();
+
+        // CommonDivisor is required to prevent an overflow of values during multiplication
+        // P.ex: Two monkeys with divisors 19 and 23
+        // -> GCD = 19 * 23
+        // -> 50 % 19 = 50 % (19 * 23) % 19
+        // -> 50 % 23 = 50 % (19 * 23) % 23
+        var newWorryLevel = InspectionMethod(worryLevel) % CommonDivisor;
+        if (isWorryReliefActivated)
         {
-            return (newItem, PositiveConditionNextMonkeyPosition);
+            newWorryLevel = (long)Math.Floor(newWorryLevel / 3.0);
+        }
+
+        if (newWorryLevel % Divisor == 0)
+        {
+            return (newWorryLevel, PositiveConditionNextMonkeyPosition);
         }
         else
         {
-            return (newItem, NegativeConditionNextMonkeyPosition);
+            return (newWorryLevel, NegativeConditionNextMonkeyPosition);
         }
     }
 
     public bool HasItems()
     {
-        return Items.Count > 0;
+        return WorryLevelItems.Count > 0;
     }
 
     public void AddItem(long item)
     {
-        Items.Enqueue(item);
+        WorryLevelItems.Enqueue(item);
+    }
+
+    public int GetTestDivisor()
+    {
+        return Divisor;
+    }
+
+    public void SetTroopCommonDivisor(int commonDivisor)
+    {
+        CommonDivisor = commonDivisor;
     }
 
     #region PARSING
