@@ -13,9 +13,16 @@ public class PuzzleSolver : IPuzzleSolver
     public long SolvePartOne(string[] inputLines)
     {
         var map = SubterraneanZoneParser.Parse(inputLines);
-        map.AnalyzeMeasurements();
 
-        return map.GetBeaconExclusionPositionCount(row: 10);
+        for (int row = -2; row < 22; row++)
+        {
+            var count = map.GetBeaconExclusionPositionCount(row);
+            Console.WriteLine($"Row: {row} | Count: {count}");
+        }
+
+        return 1;
+
+        return map.GetBeaconExclusionPositionCount(row: 2000000);
     }
 
     public long? SolvePartTwo(string[] inputLines)

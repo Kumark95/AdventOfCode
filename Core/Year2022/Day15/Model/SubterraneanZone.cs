@@ -1,83 +1,64 @@
-﻿namespace AdventOfCode.Core.Year2022.Day15.Model;
+namespace AdventOfCode.Core.Year2022.Day15.Model;
 
 internal class SubterraneanZone
 {
-    public const char SensorSymbol = 'S';
-    public const char BeaconSymbol = 'B';
-    public const char BeaconExclusionPositionSymbol = '#';
-
     public List<SensorMeasurement> SensorMeasurements { get; init; }
-    private Dictionary<Position, char> MarkedPositions { get; init; }
 
     public SubterraneanZone(List<SensorMeasurement> sensorMeasurements)
     {
         SensorMeasurements = sensorMeasurements;
-        MarkedPositions = InitMarkedPositions(sensorMeasurements);
-    }
-
-    public void AnalyzeMeasurements()
-    {
-        foreach (var measurement in SensorMeasurements)
-        {
-            var sensor = measurement.Sensor;
-            var beaconDistance = sensor.ManhattanDistance(measurement.ClosestBeacon);
-
-            var queue = new Queue<Position>();
-            queue.Enqueue(sensor);
-
-            // Analyze its surroundings
-            while (queue.Count > 0)
-            {
-                var position = queue.Dequeue();
-
-                foreach (var neightbour in position.Neighbours())
-                {
-                    if (IsMarked(neightbour))
-                    {
-                        continue;
-
-                    }
-
-                    var neighbourDistance = sensor.ManhattanDistance(neightbour);
-                    if (neighbourDistance > beaconDistance)
-                    {
-                        continue;
-                    }
-
-                    MarkExclusionPosition(neightbour);
-                    queue.Enqueue(neightbour);
-                }
-            }
-        }
     }
 
     public int GetBeaconExclusionPositionCount(int row)
     {
-        var positions = MarkedPositions.Keys.ToList();
+        // TO CHECK:
+        // * Elements inside the Exclusion zone of each sensor at a given row
+        // * To HashSet?
 
-        return MarkedPositions
-            .Where(p => p.Key.Row == row && p.Value == BeaconExclusionPositionSymbol)
-            .Count();
-    }
+        var minCol = 0;
+        var maxCol = 0;
 
-    private static Dictionary<Position, char> InitMarkedPositions(List<SensorMeasurement> sensorMeasurements)
-    {
-        var occupiedPositions = new Dictionary<Position, char>();
-        foreach (var measurement in sensorMeasurements)
+        foreach (var measurement in SensorMeasurements)
         {
-            occupiedPositions.TryAdd(measurement.Sensor, SensorSymbol);
-            occupiedPositions.TryAdd(measurement.ClosestBeacon, BeaconSymbol);
+            var sensorCol = measurement.Sensor.Col;
+            var sensorColExpandedWest = sensorCol - measurement.Distance;
+            var sensorColExpandedEast = sensorCol + measurement.Distance;
+
+            var beaconCol = measurement.ClosestBeacon.Col;
+
+            minCol = Math.Min(minCol, Math.Min(sensorColExpandedWest, beaconCol));
+            maxCol = Math.Max(minCol, Math.Max(sensorColExpandedEast, beaconCol));
         }
-        return occupiedPositions;
+
+        var count = 0;
+        for (int i = minCol; i <= maxCol; i++)
+        {
+            var position = new Position(row, i);
+            if (IsInsideAnyExclusionZone(position))
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
-    private bool IsMarked(Position position)
+    public bool IsInsideAnyExclusionZone(Position position)
     {
-        return MarkedPositions.ContainsKey(position);
-    }
+        foreach (var measurement in SensorMeasurements)
+        {
+            if (position == measurement.Sensor || position == measurement.ClosestBeacon)
+            {
+                // Positions occupied by sensors or beacons do not count
+                return false;
+            }
 
-    private void MarkExclusionPosition(Position position)
-    {
-        MarkedPositions.Add(position, BeaconExclusionPositionSymbol);
+            if (measurement.IsInsideExclusionZone(position))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
