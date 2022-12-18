@@ -4,12 +4,7 @@ internal class SensorMeasurement
 {
     public Position Sensor { get; init; }
     public Position ClosestBeacon { get; init; }
-
     public int Distance { get; init; }
-    public Position ExcusionZoneNorth { get; init; }
-    public Position ExcusionZoneSouth { get; init; }
-    public Position ExcusionZoneWest { get; init; }
-    public Position ExcusionZoneEast { get; init; }
 
     public SensorMeasurement(Position sensor, Position closestBeacon)
     {
@@ -17,21 +12,27 @@ internal class SensorMeasurement
         ClosestBeacon = closestBeacon;
 
         Distance = sensor.ManhattanDistance(closestBeacon);
-        ExcusionZoneNorth = new Position(sensor.Row - Distance, sensor.Col);
-        ExcusionZoneSouth = new Position(sensor.Row + Distance, sensor.Col);
-        ExcusionZoneWest = new Position(sensor.Row, sensor.Col - Distance);
-        ExcusionZoneEast = new Position(sensor.Row, sensor.Col + Distance);
     }
 
-    public bool IsInsideExclusionZone(Position position)
+    public List<Position> GetBeaconExclussionPositions(int row)
     {
-        var distnaceToTarget = Sensor.ManhattanDistance(position);
-        return distnaceToTarget <= Distance;
-    }
+        var excludedPositions = new List<Position>();
 
-    public List<Position> GetExclussionPositions(int row)
-    {
-        var positions = new List<Position>();
-        return positions;
+        var rowDiff = Math.Abs(Sensor.Row - row);
+        var minCol = Sensor.Col - Distance + rowDiff;
+        var maxCol = Sensor.Col + Distance - rowDiff;
+
+        for (int c = minCol; c <= maxCol; c++)
+        {
+            var pos = new Position(row, c);
+            if (pos == ClosestBeacon)
+            {
+                continue;
+            }
+
+            excludedPositions.Add(pos);
+        }
+
+        return excludedPositions;
     }
 }
