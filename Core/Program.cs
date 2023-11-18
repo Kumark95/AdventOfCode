@@ -1,8 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
+// See https://aka.ms/new-console-template for more information
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 
 Console.WriteLine("**********************************************");
@@ -10,14 +11,22 @@ Console.WriteLine("*************** Advent of Code ***************");
 Console.WriteLine("**********************************************");
 Console.WriteLine();
 
-if (args.Length != 2)
-{
-    Console.WriteLine("Usage: dotnet run <Year> <Day>");
-    Environment.Exit(1);
-}
+int targetYear, targetDay;
 
-int targetYear = int.Parse(args[0]);
-int targetDay = int.Parse(args[1]);
+switch (args.Length)
+{
+    case 0:
+        (targetYear, targetDay) = GetMostRecentYearDay();
+        break;
+    case 2:
+        targetYear = int.Parse(args[0]);
+        targetDay = int.Parse(args[1]);
+        break;
+    default:
+        Console.WriteLine("Usage: dotnet run <Year> <Day>");
+        Environment.Exit(1);
+        return;
+}
 
 Console.WriteLine($"Solving day {targetDay} of year {targetYear}");
 
@@ -30,7 +39,7 @@ List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
 
 // Select target solver
 var solver = solvers.SingleOrDefault(s => s.Year == targetYear && s.Day == targetDay);
-if (solver == null)
+if (solver is null)
 {
     Console.WriteLine("No solver available");
     Console.WriteLine();
@@ -39,7 +48,7 @@ if (solver == null)
 
 //
 var puzzleNameAttribute = solver.GetType().GetCustomAttribute<PuzzleName>();
-if (puzzleNameAttribute != null)
+if (puzzleNameAttribute is not null)
 {
     Console.WriteLine($"Puzzle name: {puzzleNameAttribute.Name}");
 }
@@ -77,7 +86,7 @@ foreach (var inputFilename in inputFilenames)
     var resultPartTwo = solver.SolvePartTwo(inputContent);
     timer.Stop();
 
-    if (resultPartTwo.HasValue)
+    if (resultPartTwo is not null)
     {
         Console.WriteLine($"Part two result: {resultPartTwo} | Took: {timer.Elapsed.Seconds}s {timer.Elapsed.Milliseconds}ms");
     }
@@ -87,4 +96,25 @@ foreach (var inputFilename in inputFilenames)
     }
 
     Console.WriteLine();
+}
+
+static (int year, int day) GetMostRecentYearDay()
+{
+    var directory = Directory.GetDirectories(".", "Day*", SearchOption.AllDirectories)
+        .Max() ?? throw new InvalidOperationException("No directories found");
+
+    Console.WriteLine(directory);
+
+    var regex = new Regex(@"Year(\d{4})[\/\\]Day(\d{2})$");
+    var match = regex.Match(directory);
+
+    if (!match.Success)
+    {
+        throw new InvalidOperationException("Could not extract year and day from the directory name");
+    }
+
+    var year = int.Parse(match.Groups[1].Value);
+    var day = int.Parse(match.Groups[2].Value);
+
+    return (year, day);
 }
