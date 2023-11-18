@@ -13,7 +13,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="Year*\Day*\*.txt">
+		<Content Include="Solvers\Year*\Day*\*.txt">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</Content>
 	</ItemGroup>

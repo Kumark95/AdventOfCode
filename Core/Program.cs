@@ -70,7 +70,7 @@ var inputFilenames = new List<string>
 // Start
 var timer = new Stopwatch();
 
-var puzzleDir = Path.Combine(Directory.GetCurrentDirectory(), $"Year{targetYear}", $"Day{targetDay:D2}");
+var puzzleDir = GetSolverDirectory(targetYear, targetDay);
 foreach (var inputFilename in inputFilenames)
 {
     var inputFile = Path.Combine(puzzleDir, inputFilename);
@@ -110,6 +110,11 @@ static void ShowUsageAndExit()
     Environment.Exit(1);
 }
 
+static string GetSolverDirectory(int year, int day)
+{
+    return Path.Combine(Directory.GetCurrentDirectory(), "Solvers", $"Year{year:D4}", $"Day{day:D2}");
+}
+
 static IPuzzleSolver? FindSolver(int year, int day)
 {
     List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
@@ -124,7 +129,7 @@ static IPuzzleSolver? FindSolver(int year, int day)
 
 static async Task SetupSolver(int year, int day, string puzzleName, string? sessionCookie)
 {
-    string directory = Path.Combine(Directory.GetCurrentDirectory(), $"Year{year:D4}", $"Day{day:D2}");
+    var directory = GetSolverDirectory(year, day);
     Directory.CreateDirectory(directory);
 
     File.WriteAllText(Path.Combine(directory, "example.txt"), string.Empty);
