@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Core.Year2021.Day18;
+namespace AdventOfCode.Core.Year2021.Day18;
 
 internal class TreeNode
 {
@@ -56,9 +56,12 @@ internal class TreeNode
 
     public int Magnitude()
     {
-        if (IsLeaf) return ContentValue.Value;
+        if (IsLeaf)
+        {
+            return ContentValue!.Value;
+        }
 
-        return 3 * Left.Magnitude() + 2 * Right.Magnitude();
+        return 3 * Left!.Magnitude() + 2 * Right!.Magnitude();
     }
 
     private void Reduce()
@@ -141,13 +144,13 @@ internal class TreeNode
         var previousLeaf = FindPreviousLeaf(node, rootPath);
         if (previousLeaf != null)
         {
-            previousLeaf.ContentValue += node.Left.ContentValue;
+            previousLeaf.ContentValue += node.Left!.ContentValue;
         }
 
         var nextLeaf = FindNextLeaf(node, rootPath);
         if (nextLeaf != null)
         {
-            nextLeaf.ContentValue += node.Right.ContentValue;
+            nextLeaf.ContentValue += node.Right!.ContentValue;
         }
 
         // The exploding pair is replaced with the regular number 0
@@ -414,14 +417,8 @@ internal class TreeNode
         }
 
         Console.WriteLine(ContentValue != null ? $"{ContentValue}({Depth})" : $"*({Depth})");
-        if (Left != null)
-        {
-            Left.PrintIndented(indent, isLastPrinted: false);
-        }
-        if (Right != null)
-        {
-            Right.PrintIndented(indent, isLastPrinted: true);
-        }
+        Left?.PrintIndented(indent, isLastPrinted: false);
+        Right?.PrintIndented(indent, isLastPrinted: true);
     }
     #endregion
 }
