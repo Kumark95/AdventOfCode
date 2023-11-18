@@ -2,6 +2,7 @@
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -16,6 +17,7 @@ int targetYear, targetDay;
 switch (args.Length)
 {
     case 0:
+        Console.WriteLine("Running the most recent solver");
         (targetYear, targetDay) = GetMostRecentYearDay();
         break;
     case 2:
@@ -23,26 +25,23 @@ switch (args.Length)
         targetDay = int.Parse(args[1]);
         break;
     default:
-        Console.WriteLine("Usage: dotnet run <Year> <Day>");
-        Environment.Exit(1);
+        ShowUsageAndExit();
         return;
 }
 
 Console.WriteLine($"Solving day {targetDay} of year {targetYear}");
-
-// Load classes implementing IPuzzleSolver
-List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
-    .Where(t => typeof(IPuzzleSolver).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
-    .Select(t => Activator.CreateInstance(t) as IPuzzleSolver)
-    .OfType<IPuzzleSolver>()
-    .ToList();
-
-// Select target solver
-var solver = solvers.SingleOrDefault(s => s.Year == targetYear && s.Day == targetDay);
+var solver = FindSolver(targetYear, targetDay);
 if (solver is null)
 {
-    Console.WriteLine("No solver available");
-    Console.WriteLine();
+    Console.WriteLine("No solver available. Setup directories? (y/n)");
+    var answer = Console.ReadLine();
+    if (answer == "y")
+    {
+        Console.WriteLine("Please provide the puzzle name");
+        var newPuzzleName = Console.ReadLine();
+        SetupSolver(targetYear, targetDay, newPuzzleName ?? "");
+    }
+
     Environment.Exit(1);
 }
 
@@ -80,7 +79,7 @@ foreach (var inputFilename in inputFilenames)
     timer.Restart();
     var resultPartOne = solver.SolvePartOne(inputContent);
     timer.Stop();
-    Console.WriteLine($"Part one result: {resultPartOne} | Took: {timer.Elapsed.Seconds}s {timer.Elapsed.Milliseconds}ms");
+    Console.WriteLine($"Part one result: {resultPartOne} | Took: {timer.Elapsed.Seconds}s {timer.Elapsed.Milliseconds}ms {timer.Elapsed.Microseconds}us");
 
     timer.Restart();
     var resultPartTwo = solver.SolvePartTwo(inputContent);
@@ -88,22 +87,84 @@ foreach (var inputFilename in inputFilenames)
 
     if (resultPartTwo is not null)
     {
-        Console.WriteLine($"Part two result: {resultPartTwo} | Took: {timer.Elapsed.Seconds}s {timer.Elapsed.Milliseconds}ms");
+        Console.WriteLine($"Part two result: {resultPartTwo} | Took: {timer.Elapsed.Seconds}s {timer.Elapsed.Milliseconds}ms {timer.Elapsed.Microseconds}us");
     }
     else
     {
         Console.WriteLine("Part two not yet unlocked");
     }
+}
 
-    Console.WriteLine();
+
+[DoesNotReturn]
+static void ShowUsageAndExit()
+{
+    Console.WriteLine("Usage: dotnet run <Year> <Day> [PuzzleName]");
+    Environment.Exit(1);
+}
+
+static IPuzzleSolver? FindSolver(int year, int day)
+{
+    List<IPuzzleSolver> solvers = Assembly.GetExecutingAssembly().GetTypes()
+        .Where(t => typeof(IPuzzleSolver).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract)
+        .Select(t => Activator.CreateInstance(t) as IPuzzleSolver)
+        .OfType<IPuzzleSolver>()
+        .ToList();
+
+    // Select target solver
+    return solvers.SingleOrDefault(s => s.Year == year && s.Day == day);
+}
+
+static void SetupSolver(int year, int day, string puzzleName)
+{
+    string directory = Path.Combine(Directory.GetCurrentDirectory(), $"Year{year:D4}", $"Day{day:D2}");
+    Directory.CreateDirectory(directory);
+
+    File.WriteAllText(Path.Combine(directory, "input.txt"), string.Empty);
+    File.WriteAllText(Path.Combine(directory, "example.txt"), string.Empty);
+
+
+    var puzzleSolverTemplate = $$"""
+        using AdventOfCode.Common.Attributes;
+        using AdventOfCode.Common.Interfaces;
+
+        namespace AdventOfCode.Core.Year{{year:D4}}.Day{{day:D2}};
+
+        [PuzzleName("{{puzzleName}}")]
+        public class PuzzleSolver : IPuzzleSolver
+        {
+            public int Year => {{year}};
+            public int Day => {{day}};
+
+            public long SolvePartOne(string[] inputLines)
+            {
+                return 0;
+            }
+
+            public long? SolvePartTwo(string[] inputLines)
+            {
+                return null;
+            }
+        }
+        """;
+    File.WriteAllText(Path.Combine(directory, "PuzzleSolver.cs"), puzzleSolverTemplate);
+
+    var readmeTemplate = $"""
+        # Day {day}: {puzzleName}
+
+        ## Part 1
+
+
+        ## Part 2
+
+        """;
+    File.WriteAllText(Path.Combine(directory, "README.md"), readmeTemplate);
 }
 
 static (int year, int day) GetMostRecentYearDay()
 {
     var directory = Directory.GetDirectories(".", "Day*", SearchOption.AllDirectories)
         .Max() ?? throw new InvalidOperationException("No directories found");
-
-    Console.WriteLine(directory);
 
     var regex = new Regex(@"Year(\d{4})[\/\\]Day(\d{2})$");
     var match = regex.Match(directory);
