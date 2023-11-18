@@ -1,11 +1,14 @@
-// See https://aka.ms/new-console-template for more information
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
+using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddUserSecrets<Program>()
+    .Build();
 
 Console.WriteLine("**********************************************");
 Console.WriteLine("*************** Advent of Code ***************");
@@ -39,7 +42,11 @@ if (solver is null)
     {
         Console.WriteLine("Please provide the puzzle name");
         var newPuzzleName = Console.ReadLine();
-        SetupSolver(targetYear, targetDay, newPuzzleName ?? "");
+
+        // TODO: Integrate with DI
+        var sessionCookie = configuration["SessionCookie"];
+
+        await SetupSolver(targetYear, targetDay, newPuzzleName ?? "", sessionCookie);
     }
 
     Environment.Exit(1);
@@ -115,14 +122,22 @@ static IPuzzleSolver? FindSolver(int year, int day)
     return solvers.SingleOrDefault(s => s.Year == year && s.Day == day);
 }
 
-static void SetupSolver(int year, int day, string puzzleName)
+static async Task SetupSolver(int year, int day, string puzzleName, string? sessionCookie)
 {
     string directory = Path.Combine(Directory.GetCurrentDirectory(), $"Year{year:D4}", $"Day{day:D2}");
     Directory.CreateDirectory(directory);
 
-    File.WriteAllText(Path.Combine(directory, "input.txt"), string.Empty);
     File.WriteAllText(Path.Combine(directory, "example.txt"), string.Empty);
 
+    if (sessionCookie is not null)
+    {
+        var puzzleInput = await FetchPuzzleInput(year, day, sessionCookie);
+        File.WriteAllText(Path.Combine(directory, "input.txt"), puzzleInput);
+    }
+    else
+    {
+        File.WriteAllText(Path.Combine(directory, "input.txt"), string.Empty);
+    }
 
     var puzzleSolverTemplate = $$"""
         using AdventOfCode.Common.Attributes;
@@ -159,6 +174,23 @@ static void SetupSolver(int year, int day, string puzzleName)
 
         """;
     File.WriteAllText(Path.Combine(directory, "README.md"), readmeTemplate);
+}
+
+static async Task<string?> FetchPuzzleInput(int year, int day, string sessionCookie)
+{
+    var httpClient = new HttpClient();
+    httpClient.DefaultRequestHeaders.Add("Cookie", sessionCookie);
+
+    try
+    {
+        Console.WriteLine("Requesting puzzle input");
+        return await httpClient.GetStringAsync($"https://adventofcode.com/{year}/day/{day}/input");
+    }
+    catch (HttpRequestException exception)
+    {
+        Console.WriteLine("Error: " + exception.Message);
+        return null;
+    }
 }
 
 static (int year, int day) GetMostRecentYearDay()
