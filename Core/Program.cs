@@ -1,14 +1,33 @@
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
+using AdventOfCode.Core.Services;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-IConfiguration configuration = new ConfigurationBuilder()
-    .AddUserSecrets<Program>()
+using IHost host = Host.CreateDefaultBuilder(args)
+    .ConfigureHostConfiguration(configBuilder =>
+    {
+        configBuilder.SetBasePath(Directory.GetCurrentDirectory());
+        configBuilder.AddJsonFile("appsettings.json", optional: false);
+        configBuilder.AddUserSecrets<Program>();
+    })
+    .ConfigureServices(services =>
+    {
+        services.AddHttpClient<AdventOfCodeService>();
+        services.AddTransient<PuzzleSetupService>();
+    })
+    .UseSerilog((context, configuration) =>
+    {
+        configuration.ReadFrom.Configuration(context.Configuration);
+    })
     .Build();
+
 
 Console.WriteLine("**********************************************");
 Console.WriteLine("*************** Advent of Code ***************");
@@ -40,13 +59,15 @@ if (solver is null)
     var answer = Console.ReadLine();
     if (answer == "y")
     {
-        Console.WriteLine("Please provide the puzzle name");
-        var newPuzzleName = Console.ReadLine();
+        var puzzleSetupService = host.Services.GetRequiredService<PuzzleSetupService>();
 
-        // TODO: Integrate with DI
-        var sessionCookie = configuration["SessionCookie"];
+        var outputDirectory = AppContext.BaseDirectory;
+        var projectDirectory = Directory.GetParent(outputDirectory)?.Parent?.Parent?.Parent?.FullName
+            ?? throw new InvalidOperationException("The project directory could not be determined");
 
-        await SetupSolver(targetYear, targetDay, newPuzzleName ?? "", sessionCookie);
+        var solverDirectory = Path.Join(projectDirectory, "Solvers");
+
+        await puzzleSetupService.SetupFiles(solverDirectory, targetYear, targetDay);
     }
 
     Environment.Exit(1);
@@ -127,92 +148,20 @@ static IPuzzleSolver? FindSolver(int year, int day)
     return solvers.SingleOrDefault(s => s.Year == year && s.Day == day);
 }
 
-static async Task SetupSolver(int year, int day, string puzzleName, string? sessionCookie)
-{
-    var directory = GetSolverDirectory(year, day);
-    Directory.CreateDirectory(directory);
-
-    File.WriteAllText(Path.Combine(directory, "example.txt"), string.Empty);
-
-    if (sessionCookie is not null)
-    {
-        var puzzleInput = await FetchPuzzleInput(year, day, sessionCookie);
-        File.WriteAllText(Path.Combine(directory, "input.txt"), puzzleInput);
-    }
-    else
-    {
-        File.WriteAllText(Path.Combine(directory, "input.txt"), string.Empty);
-    }
-
-    var puzzleSolverTemplate = $$"""
-        using AdventOfCode.Common.Attributes;
-        using AdventOfCode.Common.Interfaces;
-
-        namespace AdventOfCode.Core.Year{{year:D4}}.Day{{day:D2}};
-
-        [PuzzleName("{{puzzleName}}")]
-        public class PuzzleSolver : IPuzzleSolver
-        {
-            public int Year => {{year}};
-            public int Day => {{day}};
-
-            public long SolvePartOne(string[] inputLines)
-            {
-                return 0;
-            }
-
-            public long? SolvePartTwo(string[] inputLines)
-            {
-                return null;
-            }
-        }
-        """;
-    File.WriteAllText(Path.Combine(directory, "PuzzleSolver.cs"), puzzleSolverTemplate);
-
-    var readmeTemplate = $"""
-        # Day {day}: {puzzleName}
-
-        ## Part 1
-
-
-        ## Part 2
-
-        """;
-    File.WriteAllText(Path.Combine(directory, "README.md"), readmeTemplate);
-}
-
-static async Task<string?> FetchPuzzleInput(int year, int day, string sessionCookie)
-{
-    var httpClient = new HttpClient();
-    httpClient.DefaultRequestHeaders.Add("Cookie", sessionCookie);
-
-    try
-    {
-        Console.WriteLine("Requesting puzzle input");
-        return await httpClient.GetStringAsync($"https://adventofcode.com/{year}/day/{day}/input");
-    }
-    catch (HttpRequestException exception)
-    {
-        Console.WriteLine("Error: " + exception.Message);
-        return null;
-    }
-}
-
 static (int year, int day) GetMostRecentYearDay()
 {
     var directory = Directory.GetDirectories(".", "Day*", SearchOption.AllDirectories)
         .Max() ?? throw new InvalidOperationException("No directories found");
 
-    var regex = new Regex(@"Year(\d{4})[\/\\]Day(\d{2})$");
+    var regex = new Regex(@"Year(?<Year>\d{4})[\/\\]Day(?<Day>\d{2})$");
     var match = regex.Match(directory);
-
     if (!match.Success)
     {
         throw new InvalidOperationException("Could not extract year and day from the directory name");
     }
 
-    var year = int.Parse(match.Groups[1].Value);
-    var day = int.Parse(match.Groups[2].Value);
+    var year = int.Parse(match.Groups["Year"].Value);
+    var day = int.Parse(match.Groups["Day"].Value);
 
     return (year, day);
 }
