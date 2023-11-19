@@ -15,11 +15,12 @@ internal sealed class PuzzleSetupService
         _adventOfCodeService = adventOfCodeService;
     }
 
-    public async Task SetupFiles(string basePath, int year, int day)
+    public async Task SetupFiles(string solverDirectory, int year, int day)
     {
-        var solverDirectory = GetSolverDirectory(basePath, year, day);
-        _logger.LogDebug("Creating solver directory {SolverDirectory}", solverDirectory);
-        Directory.CreateDirectory(solverDirectory);
+        if (!Directory.Exists(solverDirectory))
+        {
+            Directory.CreateDirectory(solverDirectory);
+        }
 
         var puzzleName = await _adventOfCodeService.GetPuzzleName(year, day);
 
@@ -27,11 +28,6 @@ internal sealed class PuzzleSetupService
         File.WriteAllText(Path.Combine(solverDirectory, "example.txt"), string.Empty);
         File.WriteAllText(Path.Combine(solverDirectory, "input.txt"), await _adventOfCodeService.GetPuzzleInput(year, day));
         File.WriteAllText(Path.Combine(solverDirectory, "PuzzleSolver.cs"), GenerateSolver(year, day, puzzleName));
-    }
-
-    private static string GetSolverDirectory(string basePath, int year, int day)
-    {
-        return Path.Combine(basePath, $"Year{year:D4}", $"Day{day:D2}");
     }
 
     private static string GenerateSolver(int year, int day, string puzzleName)
