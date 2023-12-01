@@ -9,7 +9,7 @@ internal sealed partial class AdventOfCodeService
     private readonly ILogger<AdventOfCodeService> _logger;
     private readonly HttpClient _httpClient;
 
-    [GeneratedRegex("--- Day \\d{1,2}: (?<PuzzleName>[\\w ]+) ---")]
+    [GeneratedRegex("""--- Day \d{1,2}: (?<PuzzleName>.*) ---""")]
     private static partial Regex PuzzleNameRegex();
 
     public AdventOfCodeService(

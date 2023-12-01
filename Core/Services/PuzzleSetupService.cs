@@ -39,7 +39,7 @@ internal sealed class PuzzleSetupService
             namespace AdventOfCode.Core.Year{{year:D4}}.Day{{day:D2}};
 
             [PuzzleName("{{puzzleName}}")]
-            public class PuzzleSolver : IPuzzleSolver
+            public sealed class PuzzleSolver : IPuzzleSolver
             {
                 public int Year => {{year}};
                 public int Day => {{day}};
