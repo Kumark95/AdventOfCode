@@ -28,12 +28,17 @@ using IHost host = Host.CreateDefaultBuilder(args)
     .Build();
 
 
+// Setup
+var outputDirectory = AppContext.BaseDirectory;
+var projectDirectory = Directory.GetParent(outputDirectory)?.Parent?.Parent?.Parent?.FullName
+    ?? throw new InvalidOperationException("The project directory could not be determined");
+
 // Read parameters from console args
 int targetYear, targetDay;
 switch (args.Length)
 {
     case 0:
-        (targetYear, targetDay) = GetMostRecentYearDay();
+        (targetYear, targetDay) = GetMostRecentYearDay(projectDirectory);
         break;
     case 2:
         targetYear = int.Parse(args[0]);
@@ -44,10 +49,6 @@ switch (args.Length)
         return;
 }
 
-// Setup
-var outputDirectory = AppContext.BaseDirectory;
-var projectDirectory = Directory.GetParent(outputDirectory)?.Parent?.Parent?.Parent?.FullName
-    ?? throw new InvalidOperationException("The project directory could not be determined");
 var solverDirectory = Path.Join(projectDirectory, "Solvers", $"Year{targetYear:D4}", $"Day{targetDay:D2}");
 
 var logger = host.Services.GetRequiredService<ILogger<Program>>();
@@ -80,9 +81,9 @@ static void ShowUsageAndExit()
     Environment.Exit(1);
 }
 
-static (int year, int day) GetMostRecentYearDay()
+static (int year, int day) GetMostRecentYearDay(string searchPath)
 {
-    var directory = Directory.GetDirectories(".", "Day*", SearchOption.AllDirectories)
+    var directory = Directory.GetDirectories(searchPath, "Day*", SearchOption.AllDirectories)
         .Max() ?? throw new InvalidOperationException("No directories found");
 
     var regex = new Regex(@"Year(?<Year>\d{4})[\/\\]Day(?<Day>\d{2})$");
