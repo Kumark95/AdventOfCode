@@ -1,4 +1,4 @@
-﻿using AdventOfCode.Common.Model;
+using AdventOfCode.Common.Model;
 
 namespace AdventOfCode.Core.Solvers.Year2021.Day25.Model;
 
@@ -148,11 +148,11 @@ internal class SeaFloor
     /// Wraps around the bound of the map
     /// </remarks>
     /// <returns></returns>
-    private MatrixPosition CalculateTargetPosition(int row, int col, bool isFromEast)
+    private Position CalculateTargetPosition(int row, int col, bool isFromEast)
     {
         return isFromEast
-            ? new MatrixPosition(row, (col + 1) % FloorColLength)
-            : new MatrixPosition((row + 1) % FloorRowLength, col);
+            ? new Position(row, (col + 1) % FloorColLength)
+            : new Position((row + 1) % FloorRowLength, col);
     }
 }
 
