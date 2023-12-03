@@ -1,3 +1,4 @@
+using AdventOfCode.Common.Extensions;
 using AdventOfCode.Common.Model;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day03.Model;
@@ -43,7 +44,7 @@ internal sealed class EngineSchematic
                     continue;
                 }
 
-                result += GetAdjacentNumbers(r, c)
+                result += GetPartNumbers(r, c)
                         .Sum();
             }
         }
@@ -65,7 +66,7 @@ internal sealed class EngineSchematic
                     continue;
                 }
 
-                var numbers = GetAdjacentNumbers(r, c);
+                var numbers = GetPartNumbers(r, c);
                 if (numbers.Count != 2)
                 {
                     continue;
@@ -83,64 +84,47 @@ internal sealed class EngineSchematic
         return character != '.' && !char.IsDigit(character);
     }
 
-    private List<int> GetAdjacentNumbers(int row, int col)
+    private List<int> GetPartNumbers(int row, int col)
     {
-        int[] rowDirection = [-1, 0, 1, 0, -1, 1, -1, 1];
-        int[] colDirection = [0, 1, 0, -1, -1, -1, 1, 1];
-
         List<int> numbers = [];
-        List<Position> visited = [];
+        List<Position> visitedDigitPositions = [];
 
-        for (int i = 0; i < rowDirection.Length; i++)
+        foreach (var (neighbourPosition, neightbourCharacter) in _map.GetAllNeighbours(row, col, MapConnectivity.EightConnected))
         {
-            var adjRow = row + rowDirection[i];
-            var adjCol = col + colDirection[i];
-            if (adjRow < 0 || adjCol < 0 || adjRow >= _map.GetLength(0) || adjCol >= _map.GetLength(0))
+            if (!char.IsDigit(neightbourCharacter) || visitedDigitPositions.Contains(neighbourPosition))
             {
                 continue;
             }
 
-            var adjCharacter = _map[adjRow, adjCol];
-            if (!char.IsDigit(adjCharacter))
-            {
-                continue;
-            }
+            // Build the full number
+            List<char> digits = [neightbourCharacter];
+            visitedDigitPositions.Add(neighbourPosition);
 
-            var adjPosition = new Position(adjRow, adjCol);
-            if (visited.Contains(adjPosition))
-            {
-                continue;
-            }
-
-            // Build the number
-            List<char> digits = [adjCharacter];
-            visited.Add(adjPosition);
-
-            var dCol = adjCol + 1;
+            var dCol = neighbourPosition.Col + 1;
             while (dCol < _map.GetLength(1))
             {
-                var dCharacter = _map[adjRow, dCol];
+                var dCharacter = _map[neighbourPosition.Row, dCol];
                 if (!char.IsDigit(dCharacter))
                 {
                     break;
                 }
 
-                visited.Add(new Position(adjRow, dCol));
+                visitedDigitPositions.Add(new Position(neighbourPosition.Row, dCol));
                 digits.Add(dCharacter);
 
                 dCol++;
             }
 
-            dCol = adjCol - 1;
+            dCol = neighbourPosition.Col - 1;
             while (dCol >= 0)
             {
-                var dCharacter = _map[adjRow, dCol];
+                var dCharacter = _map[neighbourPosition.Row, dCol];
                 if (!char.IsDigit(dCharacter))
                 {
                     break;
                 }
 
-                visited.Add(new Position(adjRow, dCol));
+                visitedDigitPositions.Add(new Position(neighbourPosition.Row, dCol));
                 digits.Insert(0, dCharacter);
                 dCol--;
             }
