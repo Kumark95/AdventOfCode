@@ -44,7 +44,7 @@ internal sealed class PuzzleSolverService
             var resultPartOne = solver.SolvePartOne(inputContent);
             timer.Stop();
             _logger.LogInformation("Part one result: {Result} | Took: {ElapsedSeconds}s {ElapsedMilliseconds}ms {ElapsedMicroseconds}us",
-                resultPartOne, timer.Elapsed.Seconds, timer.Elapsed.Milliseconds, timer.Elapsed.Microseconds);
+                resultPartOne, timer.Elapsed.TotalSeconds, timer.Elapsed.Milliseconds, timer.Elapsed.Microseconds);
 
             timer.Restart();
             var resultPartTwo = solver.SolvePartTwo(inputContent);
@@ -57,7 +57,7 @@ internal sealed class PuzzleSolverService
             else
             {
                 _logger.LogInformation("Part two result: {Result} | Took: {ElapsedSeconds}s {ElapsedMilliseconds}ms {ElapsedMicroseconds}us",
-                    resultPartTwo, timer.Elapsed.Seconds, timer.Elapsed.Milliseconds, timer.Elapsed.Microseconds);
+                    resultPartTwo, timer.Elapsed.TotalSeconds, timer.Elapsed.Milliseconds, timer.Elapsed.Microseconds);
             }
         }
     }

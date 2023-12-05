@@ -52,7 +52,6 @@ switch (args.Length)
 var solverDirectory = Path.Join(projectDirectory, "Solvers", $"Year{targetYear:D4}", $"Day{targetDay:D2}");
 
 var logger = host.Services.GetRequiredService<ILogger<Program>>();
-var puzzleSetupService = host.Services.GetRequiredService<PuzzleSetupService>();
 var puzzleSolverService = host.Services.GetRequiredService<PuzzleSolverService>();
 
 // Solve the puzzle
@@ -68,6 +67,7 @@ else
     var answer = Console.ReadLine();
     if (answer == "y")
     {
+        var puzzleSetupService = host.Services.GetRequiredService<PuzzleSetupService>();
         await puzzleSetupService.SetupFiles(solverDirectory, targetYear, targetDay);
     }
 
