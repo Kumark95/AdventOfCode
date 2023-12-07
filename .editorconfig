@@ -11,7 +11,10 @@ insert_final_newline = true
 
 [*.cs]
 csharp_style_namespace_declarations = file_scoped:error
-
+csharp_style_prefer_primary_constructors = false
+dotnet_style_prefer_collection_expression = false
+dotnet_style_collection_initializer = false
+1
 # Instance fields are camelCase and start with _
 dotnet_naming_rule.instance_fields_should_be_camel_case.severity = warning
 dotnet_naming_rule.instance_fields_should_be_camel_case.symbols = instance_fields
