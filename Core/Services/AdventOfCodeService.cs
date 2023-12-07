@@ -1,6 +1,7 @@
 using HtmlAgilityPack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Core.Services;
@@ -26,10 +27,19 @@ internal sealed partial class AdventOfCodeService
         _httpClient.DefaultRequestHeaders.Add("Cookie", sessionCookie);
     }
 
-    public async Task<string> GetPuzzleName(int year, int day)
+    public async Task<string?> GetPuzzleName(int year, int day)
     {
         _logger.LogInformation("Requesting puzzle description");
-        var htmlContent = await _httpClient.GetStringAsync($"/{year}/day/{day}");
+        string htmlContent;
+        try
+        {
+            htmlContent = await _httpClient.GetStringAsync($"/{year}/day/{day}");
+        }
+        catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            _logger.LogWarning("Puzzle information not yet available");
+            return null;
+        }
 
         // Parse
         var doc = new HtmlDocument();

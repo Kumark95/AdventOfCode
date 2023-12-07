@@ -17,12 +17,16 @@ internal sealed class PuzzleSetupService
 
     public async Task SetupFiles(string solverDirectory, int year, int day)
     {
+        var puzzleName = await _adventOfCodeService.GetPuzzleName(year, day);
+        if (puzzleName is null)
+        {
+            return;
+        }
+
         if (!Directory.Exists(solverDirectory))
         {
             Directory.CreateDirectory(solverDirectory);
         }
-
-        var puzzleName = await _adventOfCodeService.GetPuzzleName(year, day);
 
         _logger.LogDebug("Generating template files");
         File.WriteAllText(Path.Combine(solverDirectory, "example.txt"), string.Empty);

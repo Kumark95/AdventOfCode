@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
 
 // Configure DI and services
 using IHost host = Host.CreateDefaultBuilder(args)
@@ -28,26 +27,19 @@ using IHost host = Host.CreateDefaultBuilder(args)
     .Build();
 
 
+// Read parameters from console args
+if (args.Length != 2)
+{
+    ShowUsageAndExit();
+}
+
+int targetYear = int.Parse(args[0]);
+int targetDay = int.Parse(args[1]);
+
 // Setup
 var outputDirectory = AppContext.BaseDirectory;
 var projectDirectory = Directory.GetParent(outputDirectory)?.Parent?.Parent?.Parent?.FullName
     ?? throw new InvalidOperationException("The project directory could not be determined");
-
-// Read parameters from console args
-int targetYear, targetDay;
-switch (args.Length)
-{
-    case 0:
-        (targetYear, targetDay) = GetMostRecentYearDay(projectDirectory);
-        break;
-    case 2:
-        targetYear = int.Parse(args[0]);
-        targetDay = int.Parse(args[1]);
-        break;
-    default:
-        ShowUsageAndExit();
-        return;
-}
 
 var solverDirectory = Path.Join(projectDirectory, "Solvers", $"Year{targetYear:D4}", $"Day{targetDay:D2}");
 
@@ -63,13 +55,9 @@ if (solver is not null)
 }
 else
 {
-    Console.WriteLine("No solver available. Setup directories? (y/n)");
-    var answer = Console.ReadLine();
-    if (answer == "y")
-    {
-        var puzzleSetupService = host.Services.GetRequiredService<PuzzleSetupService>();
-        await puzzleSetupService.SetupFiles(solverDirectory, targetYear, targetDay);
-    }
+    logger.LogInformation("No solver available. Setting up directories...");
+    var puzzleSetupService = host.Services.GetRequiredService<PuzzleSetupService>();
+    await puzzleSetupService.SetupFiles(solverDirectory, targetYear, targetDay);
 
     Environment.Exit(1);
 }
@@ -79,22 +67,4 @@ static void ShowUsageAndExit()
 {
     Console.WriteLine("Usage: dotnet run <Year> <Day> [PuzzleName]");
     Environment.Exit(1);
-}
-
-static (int year, int day) GetMostRecentYearDay(string searchPath)
-{
-    var directory = Directory.GetDirectories(searchPath, "Day*", SearchOption.AllDirectories)
-        .Max() ?? throw new InvalidOperationException("No directories found");
-
-    var regex = new Regex(@"Year(?<Year>\d{4})[\/\\]Day(?<Day>\d{2})$");
-    var match = regex.Match(directory);
-    if (!match.Success)
-    {
-        throw new InvalidOperationException("Could not extract year and day from the directory name");
-    }
-
-    var year = int.Parse(match.Groups["Year"].Value);
-    var day = int.Parse(match.Groups["Day"].Value);
-
-    return (year, day);
 }
