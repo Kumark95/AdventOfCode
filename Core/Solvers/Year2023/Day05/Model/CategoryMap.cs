@@ -1,3 +1,5 @@
+using AdventOfCode.Common.Model;
+
 namespace AdventOfCode.Core.Solvers.Year2023.Day05.Model;
 
 internal record CategoryMap(string SourceCategory, string DestinationCategory, RangeConverter[] Converters)
@@ -15,20 +17,20 @@ internal record CategoryMap(string SourceCategory, string DestinationCategory, R
         return sourceNumber;
     }
 
-    public List<Range> ConvertCategory(Range range)
+    public List<Range<long>> ConvertCategory(Range<long> range)
     {
         var thresholdRanges = Converters
             .Select(c => c.SourceRange)
             .ToList();
 
-        var destinationRanges = new List<Range>();
+        var destinationRanges = new List<Range<long>>();
 
         foreach (var splitRange in SplitRange(range, thresholdRanges))
         {
             var shouldAddSelf = true;
             foreach (var converter in Converters)
             {
-                if (converter.TryConvert(splitRange, out Range destinationRange))
+                if (converter.TryConvert(splitRange, out Range<long> destinationRange))
                 {
                     destinationRanges.Add(destinationRange);
 
@@ -50,10 +52,10 @@ internal record CategoryMap(string SourceCategory, string DestinationCategory, R
     /// <summary>
     /// Split a range preserving the threshold ranges limits
     /// </summary>
-    private List<Range> SplitRange(Range range, List<Range> thresholdRanges)
+    private List<Range<long>> SplitRange(Range<long> range, List<Range<long>> thresholdRanges)
     {
-        List<Range> result = [];
-        Range currentRange = range;
+        List<Range<long>> result = [];
+        Range<long> currentRange = range;
 
         foreach (var threshold in thresholdRanges.OrderBy(t => t.Start))
         {

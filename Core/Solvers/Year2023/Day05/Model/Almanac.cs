@@ -1,3 +1,5 @@
+using AdventOfCode.Common.Model;
+
 namespace AdventOfCode.Core.Solvers.Year2023.Day05.Model;
 
 internal record Almanac(CategoryMap[] CategoryMaps)
@@ -13,9 +15,9 @@ internal record Almanac(CategoryMap[] CategoryMaps)
         return convertedNumber;
     }
 
-    public long CalculateMinLocation(Range range)
+    public long CalculateMinLocation(Range<long> range)
     {
-        List<Range> convertedRanges = [range];
+        List<Range<long>> convertedRanges = [range];
 
         foreach (var map in CategoryMaps)
         {

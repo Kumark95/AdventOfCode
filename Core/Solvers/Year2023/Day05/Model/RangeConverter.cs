@@ -1,6 +1,8 @@
+using AdventOfCode.Common.Model;
+
 namespace AdventOfCode.Core.Solvers.Year2023.Day05.Model;
 
-internal record RangeConverter(Range SourceRange, Range DestinationRange)
+internal record RangeConverter(Range<long> SourceRange, Range<long> DestinationRange)
 {
     public bool TryConvert(long inputNumber, out long outputNumber)
     {
@@ -16,7 +18,7 @@ internal record RangeConverter(Range SourceRange, Range DestinationRange)
         return false;
     }
 
-    public bool TryConvert(Range input, out Range output)
+    public bool TryConvert(Range<long> input, out Range<long> output)
     {
         if (SourceRange.Contains(input))
         {
@@ -24,7 +26,7 @@ internal record RangeConverter(Range SourceRange, Range DestinationRange)
             var destinationRangeStart = DestinationRange.Start + delta;
             var destinarionRangeEnd = DestinationRange.Start + delta + input.Length - 1;
 
-            output = new Range(destinationRangeStart, destinarionRangeEnd);
+            output = new Range<long>(destinationRangeStart, destinarionRangeEnd);
             return true;
         }
 

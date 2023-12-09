@@ -1,3 +1,5 @@
+using AdventOfCode.Common.Model;
+
 namespace AdventOfCode.Core.Solvers.Year2023.Day05.Model;
 
 internal static class InputParser
@@ -11,7 +13,7 @@ internal static class InputParser
             .ToArray();
     }
 
-    public static Range[] ParseSeedRanges(string line)
+    public static Range<long>[] ParseSeedRanges(string line)
     {
         var baseNumbers = ParseSeedNumbers(line);
 
@@ -21,7 +23,7 @@ internal static class InputParser
             {
                 var start = baseNumbers[i * 2];
                 var length = baseNumbers[i * 2 + 1];
-                return new Range(start, start + length - 1);
+                return new Range<long>(start, start + length - 1);
             })
             .ToArray();
     }
@@ -54,8 +56,8 @@ internal static class InputParser
                 var sourceStart = long.Parse(lineParts[1]);
                 var rangeLength = long.Parse(lineParts[2]);
 
-                var sourceRange = new Range(sourceStart, sourceStart + rangeLength - 1);
-                var destinationRange = new Range(destinationStart, destinationStart + rangeLength - 1);
+                var sourceRange = new Range<long>(sourceStart, sourceStart + rangeLength - 1);
+                var destinationRange = new Range<long>(destinationStart, destinationStart + rangeLength - 1);
 
                 rangeConverters.Add(new RangeConverter(sourceRange, destinationRange));
             }
