@@ -10,6 +10,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 5;
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 35)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 525792406)]
     public long? SolvePartOne(string[] inputLines)
     {
         var seedNumbers = InputParser.ParseSeedNumbers(inputLines[0]);
@@ -20,6 +22,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
             .Min();
     }
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 46)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 79004094)]
     public long? SolvePartTwo(string[] inputLines)
     {
         var seedRanges = InputParser.ParseSeedRanges(inputLines[0]);

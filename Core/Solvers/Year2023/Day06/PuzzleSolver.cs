@@ -10,6 +10,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 6;
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 288)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 771628)]
     public long? SolvePartOne(string[] inputLines)
     {
         var timeMatches = InputParser.ExtractNumbers(inputLines[0]);
@@ -25,6 +27,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
             .Aggregate((a, b) => a * b);
     }
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 71503)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 27363861)]
     public long? SolvePartTwo(string[] inputLines)
     {
         var time = InputParser.ExtractSingleNumber(inputLines[0]);

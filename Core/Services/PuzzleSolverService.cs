@@ -10,8 +10,6 @@ internal sealed class PuzzleSolverService
 {
     private readonly ILogger<PuzzleSolverService> _logger;
 
-    private readonly string[] _sampleFiles = ["example.txt", "input.txt"];
-
     public PuzzleSolverService(ILogger<PuzzleSolverService> logger)
     {
         _logger = logger;
@@ -19,28 +17,20 @@ internal sealed class PuzzleSolverService
 
     public void Solve(string solverDirectory, IPuzzleSolver solver)
     {
-        var puzzleNameAttribute = solver.GetType().GetCustomAttribute<PuzzleName>();
+        var solverType = solver.GetType();
+        var puzzleNameAttribute = solverType.GetCustomAttribute<PuzzleName>();
         if (puzzleNameAttribute is not null)
         {
             _logger.LogInformation("Puzzle name: {PuzzleName}", puzzleNameAttribute.Name);
         }
 
-        // Start
-        foreach (var sampleFile in _sampleFiles)
-        {
-            var sampleFilePath = Path.Combine(solverDirectory, sampleFile);
-            _logger.LogInformation("Using {SampleFile}", sampleFile);
-            if (!File.Exists(sampleFilePath))
-            {
-                _logger.LogWarning("Input file {SampleFilePath} does not exists. Skipping...", sampleFilePath);
-                continue;
-            }
+        _logger.LogInformation("Solving Part One");
+        var partOneInputs = solverType.GetMethod(nameof(IPuzzleSolver.SolvePartOne))!.GetCustomAttributes<PuzzleInput>();
+        FetchInputsAndSolve(solverDirectory, partOneInputs, solver.SolvePartOne);
 
-            var inputContent = File.ReadAllLines(sampleFilePath);
-
-            MeasurePerformance(() => solver.SolvePartOne(inputContent), "PartOne");
-            MeasurePerformance(() => solver.SolvePartTwo(inputContent), "PartTwo");
-        }
+        _logger.LogInformation("Solving Part Two");
+        var partTwoInputs = solverType.GetMethod(nameof(IPuzzleSolver.SolvePartTwo))!.GetCustomAttributes<PuzzleInput>();
+        FetchInputsAndSolve(solverDirectory, partTwoInputs, solver.SolvePartTwo);
     }
 
     public IPuzzleSolver? FindSolver(int year, int day)
@@ -56,7 +46,52 @@ internal sealed class PuzzleSolverService
         return solvers.SingleOrDefault(s => s.Year == year && s.Day == day);
     }
 
-    private void MeasurePerformance<T>(Func<T> func, string funcName)
+    private void FetchInputsAndSolve(string solverDirectory, IEnumerable<PuzzleInput> inputs, Func<string[], long?> solverMethod)
+    {
+        if (!inputs.Any())
+        {
+            _logger.LogWarning("No input files provided");
+        }
+
+        foreach (var input in inputs)
+        {
+            _logger.LogInformation("Using {Filename}", input.Filename);
+            var inputFilePath = Path.Combine(solverDirectory, input.Filename);
+            if (!File.Exists(inputFilePath))
+            {
+                _logger.LogWarning("Input file {FilePath} does not exists. Skipping...", inputFilePath);
+                continue;
+            }
+
+            var inputContent = File.ReadAllLines(inputFilePath);
+
+            var executionData = ExecuteAndMeasure(() => solverMethod(inputContent));
+            if (executionData.Result is null)
+            {
+                _logger.LogInformation("");
+                break;
+            }
+
+            var resultMatch = executionData.Result == input.ExpectedResult
+                ? "PASS"
+                : "FAIL";
+
+            _logger.LogInformation("Result: {Result} | Expected result: {ExpectedResult} ({ResultMatch}) | Execution time: {ExecutionTime} | Memory used: {MemoryUsed}",
+                executionData.Result,
+                input.ExpectedResult,
+                resultMatch,
+                FormatTimeSpan(executionData.ExecutionTime), FormatBytes(executionData.MemoryUsed));
+
+
+            if (resultMatch == "FAIL")
+            {
+                _logger.LogWarning("Halting further tests as the previous results did not match");
+                break;
+            }
+        }
+    }
+
+    private static ExecutionData ExecuteAndMeasure(Func<long?> calculation)
     {
         var startMemory = 0L;
         using (Process proc = Process.GetCurrentProcess())
@@ -64,7 +99,7 @@ internal sealed class PuzzleSolverService
             startMemory = Process.GetCurrentProcess().PrivateMemorySize64;
         }
         var startTimestamp = Stopwatch.GetTimestamp();
-        var result = func();
+        var result = calculation();
         var elapsed = Stopwatch.GetElapsedTime(startTimestamp);
         var endMemory = 0L;
         using (Process proc = Process.GetCurrentProcess())
@@ -72,19 +107,20 @@ internal sealed class PuzzleSolverService
             endMemory = Process.GetCurrentProcess().PrivateMemorySize64;
         }
 
-        if (result is null)
+        var memoryUsed = endMemory - startMemory;
+        if (memoryUsed < 0)
         {
-            _logger.LogInformation("{FuncName} not yet unlocked", funcName);
+            memoryUsed = 0;
         }
-        else
-        {
-            var elapsedMessage = elapsed.Minutes > 0
+
+        return new ExecutionData(result, elapsed, memoryUsed);
+    }
+
+    private static string FormatTimeSpan(TimeSpan elapsed)
+    {
+        return elapsed.Minutes > 0
                 ? $"{elapsed.Minutes}m {elapsed.Seconds}s {elapsed.Milliseconds}ms {elapsed.Microseconds}μs"
                 : $"{elapsed.Seconds}s {elapsed.Milliseconds}ms {elapsed.Microseconds}μs";
-
-            _logger.LogInformation("{FuncName} result: {Result} | Took: {Elapsed} | Memory: {MemoryUsed}",
-                funcName, result, elapsedMessage, FormatBytes(endMemory - startMemory));
-        }
     }
 
     private static string FormatBytes(long bytes)

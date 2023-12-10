@@ -10,6 +10,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 2;
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 8)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 2879)]
     public long? SolvePartOne(string[] inputLines)
     {
         var result = 0;
@@ -33,6 +35,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
         return result;
     }
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 2286)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 65122)]
     public long? SolvePartTwo(string[] inputLines)
     {
         var result = 0;

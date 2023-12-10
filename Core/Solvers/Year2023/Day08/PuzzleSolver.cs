@@ -10,6 +10,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 8;
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 2)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 19951)]
     public long? SolvePartOne(string[] inputLines)
     {
         NavigationMap map = InputParser.ParseInput(inputLines);
@@ -17,6 +19,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
         return map.CalculateStepsForHumans();
     }
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 2)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 16342438708751)]
     public long? SolvePartTwo(string[] inputLines)
     {
         NavigationMap map = InputParser.ParseInput(inputLines);

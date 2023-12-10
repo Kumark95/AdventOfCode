@@ -48,7 +48,7 @@ internal sealed class PuzzleSetupService
                 public int Year => {{year}};
                 public int Day => {{day}};
 
-                public long SolvePartOne(string[] inputLines)
+                public long? SolvePartOne(string[] inputLines)
                 {
                     return 0;
                 }

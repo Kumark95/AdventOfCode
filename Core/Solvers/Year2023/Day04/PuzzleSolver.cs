@@ -10,6 +10,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 4;
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 13)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 24848)]
     public long? SolvePartOne(string[] inputLines)
     {
         var result = 0;
@@ -23,6 +25,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
         return result;
     }
 
+    [PuzzleInput(filename: "example.txt", expectedResult: 30)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 7258152)]
     public long? SolvePartTwo(string[] inputLines)
     {
         // Initialize the dictionary 

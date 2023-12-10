@@ -10,6 +10,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 10;
 
+    [PuzzleInput(filename: "example-1.txt", expectedResult: 4)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 6942)]
     public long? SolvePartOne(string[] inputLines)
     {
         var maze = InputParser.ParseInput(inputLines);
@@ -17,6 +19,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
         return maze.CalculateMaxLoopDistance();
     }
 
+    [PuzzleInput(filename: "example-2.txt", expectedResult: 10)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 297)]
     public long? SolvePartTwo(string[] inputLines)
     {
         var maze = InputParser.ParseInput(inputLines);
