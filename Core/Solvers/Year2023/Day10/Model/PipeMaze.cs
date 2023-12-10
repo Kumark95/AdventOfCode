@@ -29,6 +29,14 @@ internal class PipeMaze
 
     public void Print()
     {
+        var polygonVertices = _pipeLoop
+            .Where(pos =>
+            {
+                var val = _map[pos.Row, pos.Col];
+                return val != '|' && val != '-';
+            })
+            .ToArray();
+
         for (var row = 0; row < _map.GetLength(0); row++)
         {
             for (var col = 0; col < _map.GetLength(1); col++)
@@ -40,7 +48,7 @@ internal class PipeMaze
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
-                else if (IsTileInsideLoop(position))
+                else if (IsTileInsidePolygon(position, polygonVertices))
                 {
                     Console.ForegroundColor = ConsoleColor.Black;
                     Console.BackgroundColor = ConsoleColor.White;
@@ -63,6 +71,14 @@ internal class PipeMaze
     {
         var total = 0;
 
+        var polygonVertices = _pipeLoop
+            .Where(pos =>
+            {
+                var val = _map[pos.Row, pos.Col];
+                return val != '|' && val != '-';
+            })
+            .ToArray();
+
         for (var row = 0; row < _map.GetLength(0); row++)
         {
             for (var col = 0; col < _map.GetLength(1); col++)
@@ -70,7 +86,7 @@ internal class PipeMaze
                 var position = new Position(row, col);
 
                 // Random pipes that are not connected to the main loop also count
-                if (!_pipeLoop.Contains(position) && IsTileInsideLoop(position))
+                if (!_pipeLoop.Contains(position) && IsTileInsidePolygon(position, polygonVertices))
                 {
                     total++;
                 }
@@ -162,39 +178,18 @@ internal class PipeMaze
         return loopPositions.ToArray();
     }
 
-    private List<Position> GetTilePositions()
-    {
-        var tilePositions = new List<Position>();
-
-        for (var row = 0; row < _map.GetLength(0); row++)
-        {
-            for (var col = 0; col < _map.GetLength(1); col++)
-            {
-                var character = _map[row, col];
-                if (character != '.')
-                {
-                    continue;
-                }
-
-                tilePositions.Add(new Position(row, col));
-            }
-        }
-
-        return tilePositions;
-    }
-
-    private bool IsTileInsideLoop(Position tilePosition)
+    private static bool IsTileInsidePolygon(Position tilePosition, Position[] polygonVertices)
     {
         // Ray Casting Algorithm to determine if a point is inside a polygon (pipe loop)
         var isInside = false;
 
         // Iterates over adjacent positions of the polygon
         // For each pair, it checks if the horizontal line extending to the right intersects with the polygon edge
-        var j = _pipeLoop.Length - 1;
-        for (int i = 0; i < _pipeLoop.Length; i++)
+        var j = polygonVertices.Length - 1;
+        for (int i = 0; i < polygonVertices.Length; i++)
         {
-            var vertexA = _pipeLoop[i];
-            var vertexB = _pipeLoop[j];
+            var vertexA = polygonVertices[i];
+            var vertexB = polygonVertices[j];
 
             if (vertexA.Row < tilePosition.Row && vertexB.Row >= tilePosition.Row
                 || vertexB.Row < tilePosition.Row && vertexA.Row >= tilePosition.Row)
