@@ -96,7 +96,7 @@ internal class PuzzleSolver : IPuzzleSolver
         }
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var (markedPositions, foldInstructions) = Input(inputLines);
 

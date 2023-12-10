@@ -25,7 +25,7 @@ public class PuzzleSolver : IPuzzleSolver
         return playerPositions;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var playerPositions = Input(inputLines);
 

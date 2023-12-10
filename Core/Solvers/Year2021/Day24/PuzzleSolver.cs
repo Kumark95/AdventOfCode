@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2021;
     public int Day => 24;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         return ArithmeticLogicUnit.FindModelNumber(inputLines, SearchMode.Maximum);
     }

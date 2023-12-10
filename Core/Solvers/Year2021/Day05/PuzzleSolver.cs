@@ -25,7 +25,7 @@ public class PuzzleSolver : IPuzzleSolver
             .Select(group => group.Key)
             .ToList();
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines, excludeDiagonal: true);
         return OverlappingPoints(input).Count();

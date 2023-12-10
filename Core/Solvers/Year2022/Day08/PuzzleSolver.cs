@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 8;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var forestMap = new Forest(inputLines);
         return forestMap.CountVisibleTrees();

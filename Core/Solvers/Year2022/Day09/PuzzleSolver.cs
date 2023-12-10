@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 9;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var instructions = inputLines
             .Select(MovementInstruction.Parse)

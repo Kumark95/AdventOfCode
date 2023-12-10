@@ -40,7 +40,7 @@ public class PuzzleSolver : IPuzzleSolver
         return (numbers, cards);
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var (numbers, cards) = Input(inputLines);
 

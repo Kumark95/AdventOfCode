@@ -14,7 +14,7 @@ public class PuzzleSolver : IPuzzleSolver
         return new TrenchMap(inputLines[0], inputLines[2..]);
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var map = Input(inputLines);
 

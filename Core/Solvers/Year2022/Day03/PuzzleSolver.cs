@@ -10,7 +10,7 @@ public partial class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 3;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var result = 0;
         foreach (var line in inputLines)

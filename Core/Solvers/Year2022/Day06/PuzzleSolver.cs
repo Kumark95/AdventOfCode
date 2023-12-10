@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 6;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         return Subrutine.FindStartOfPacket(inputLines[0], markerLenght: 4);
     }

@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2021;
     public int Day => 22;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         return Reactor.RebootAndCountLightCubes(inputLines, onlyInitialyze: true);
     }

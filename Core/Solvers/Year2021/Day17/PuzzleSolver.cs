@@ -79,7 +79,7 @@ public class PuzzleSolver : IPuzzleSolver
         return null;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var targetArea = Input(inputLines);
         var initialPosition = new Point(0, 0);

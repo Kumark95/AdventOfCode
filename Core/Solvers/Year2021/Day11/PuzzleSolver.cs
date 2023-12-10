@@ -105,7 +105,7 @@ public class PuzzleSolver : IPuzzleSolver
         return flashesRecorded;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines);
 

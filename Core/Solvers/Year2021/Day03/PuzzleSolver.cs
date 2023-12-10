@@ -12,7 +12,7 @@ public class PuzzleSolver : IPuzzleSolver
 
     private List<string> Input(string[] inputLines) => inputLines.ToList();
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var inputData = Input(inputLines);
 

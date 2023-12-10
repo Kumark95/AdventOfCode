@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 15;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var map = SubterraneanZoneParser.Parse(inputLines);
         return map.GetBeaconExclusionPositionCount(row: 2000000);

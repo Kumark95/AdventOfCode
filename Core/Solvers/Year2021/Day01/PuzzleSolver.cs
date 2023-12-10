@@ -66,7 +66,7 @@ public class PuzzleSolver : IPuzzleSolver
             .Select(l => int.Parse(l))
             .ToArray();
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         return CountPreviousLargerItem(Input(inputLines));
     }

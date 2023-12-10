@@ -22,7 +22,7 @@ public class PuzzleSolver : IPuzzleSolver
         return trees;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var resultingTree = Input(inputLines)
             .Aggregate((a, b) => TreeNode.Add(a, b));

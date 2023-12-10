@@ -32,7 +32,7 @@ public class PuzzleSolver : IPuzzleSolver
         return list;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var calorieSumList = CalculateCalorieSum(inputLines);
 

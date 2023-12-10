@@ -36,7 +36,7 @@ public class PuzzleSolver : IPuzzleSolver
         return scanners;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var scanners = Input(inputLines);
         var reorientedScanners = Scanner.Reorient(scanners);

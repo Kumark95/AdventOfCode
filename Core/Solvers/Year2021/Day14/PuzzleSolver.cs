@@ -78,7 +78,7 @@ internal class PuzzleSolver : IPuzzleSolver
         return frequencyCounts.Max() - frequencyCounts.Min();
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var (polymerTemplate, insertionElements) = Input(inputLines);
 

@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2021;
     public int Day => 25;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var floor = new SeaFloor(inputLines);
         return floor.StepsUntilStop();

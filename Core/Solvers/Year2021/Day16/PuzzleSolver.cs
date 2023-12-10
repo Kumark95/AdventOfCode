@@ -30,7 +30,7 @@ public class PuzzleSolver : IPuzzleSolver
             .Aggregate((s1, s2) => s1 + "" + s2);
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines);
 

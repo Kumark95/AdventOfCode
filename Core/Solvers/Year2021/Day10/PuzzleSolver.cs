@@ -65,7 +65,7 @@ public class PuzzleSolver : IPuzzleSolver
         return (stack, null);
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var result = 0;
 

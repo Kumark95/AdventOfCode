@@ -9,7 +9,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 1;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         return inputLines
             .Select(l => ExtractCalibrationValue(l))

@@ -40,7 +40,7 @@ public class PuzzleSolver : IPuzzleSolver
         return displayReadings;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var counter = 0;
 

@@ -36,7 +36,7 @@ public class PuzzleSolver : IPuzzleSolver
         return groups;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var result = 0;
 

@@ -63,7 +63,7 @@ public class PuzzleSolver : IPuzzleSolver
         return (crateStacks, craneMovements);
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var (crateStacks, craneMovements) = Input(inputLines);
 

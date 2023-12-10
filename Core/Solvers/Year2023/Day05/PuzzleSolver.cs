@@ -10,7 +10,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Year => 2023;
     public int Day => 5;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var seedNumbers = InputParser.ParseSeedNumbers(inputLines[0]);
         var almanac = InputParser.ParseAlmanac(inputLines[2..]);

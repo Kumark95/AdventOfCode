@@ -10,7 +10,7 @@ public partial class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 2;
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var game = new HandGame(inputLines, DecryptionStrategy.UserSelection);
         return game.CalculateTotalScore();

@@ -66,7 +66,7 @@ public class PuzzleSolver : IPuzzleSolver
         return map;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var map = Input(inputLines);
 

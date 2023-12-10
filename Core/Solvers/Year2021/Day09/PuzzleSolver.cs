@@ -39,7 +39,7 @@ public class PuzzleSolver : IPuzzleSolver
         return adjacentLocations;
     }
 
-    public long SolvePartOne(string[] inputLines)
+    public long? SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines);
 
