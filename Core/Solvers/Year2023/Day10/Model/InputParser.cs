@@ -6,14 +6,12 @@ internal static class InputParser
 {
     public static PipeMaze ParseInput(string[] inputLines)
     {
-        var mapSize = inputLines.Length;
-        var map = new char[mapSize, mapSize];
-
+        var map = new char[inputLines.Length, inputLines[0].Length];
         Position? startPosition = null;
 
-        for (var row = 0; row < mapSize; row++)
+        for (var row = 0; row < inputLines.Length; row++)
         {
-            for (var col = 0; col < mapSize; col++)
+            for (var col = 0; col < inputLines[0].Length; col++)
             {
                 var character = inputLines[row][col];
                 if (character == 'S')

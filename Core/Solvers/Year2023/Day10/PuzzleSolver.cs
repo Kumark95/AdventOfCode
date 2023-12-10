@@ -14,13 +14,13 @@ public sealed class PuzzleSolver : IPuzzleSolver
     {
         var maze = InputParser.ParseInput(inputLines);
 
-        var length = maze.CalculateLoopLength();
-
-        return length / 2;
+        return maze.CalculateMaxLoopDistance();
     }
 
     public long? SolvePartTwo(string[] inputLines)
     {
-        return null;
+        var maze = InputParser.ParseInput(inputLines);
+
+        return maze.CalculateTotalEnclosedTiles();
     }
 }
