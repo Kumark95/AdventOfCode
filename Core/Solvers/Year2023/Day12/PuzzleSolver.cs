@@ -19,11 +19,12 @@ public sealed class PuzzleSolver : IPuzzleSolver
             .Sum();
     }
 
-
     [PuzzleInput(filename: "example.txt", expectedResult: 525152)]
-    [PuzzleInput(filename: "input.txt", expectedResult: -1)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 3920437278260)]
     public long? SolvePartTwo(string[] inputLines)
     {
-        return null;
+        return InputParser.ParseInputAndExpand(inputLines)
+            .Select(springs => springs.CalculatePossibleArrangements())
+            .Sum();
     }
 }

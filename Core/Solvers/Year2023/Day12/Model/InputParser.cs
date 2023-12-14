@@ -1,5 +1,3 @@
-using System.Text;
-
 namespace AdventOfCode.Core.Solvers.Year2023.Day12.Model;
 
 internal static class InputParser
@@ -19,56 +17,27 @@ internal static class InputParser
             })
             .ToArray();
     }
-}
 
-internal readonly record struct HotSpringsRecords(string Records, int[] DamagedSprings)
-{
-    public int CalculatePossibleArrangements()
+    public static HotSpringsRecords[] ParseInputAndExpand(string[] inputLines)
     {
-        var result = 0;
-
-        var stack = new Stack<string>();
-        stack.Push(Records);
-
-        while (stack.Count > 0)
-        {
-            var testStr = stack.Pop();
-
-            var firstUnknownIdx = testStr.IndexOf('?');
-            if (firstUnknownIdx == -1)
+        return inputLines
+            .Select(l =>
             {
-                if (IsValid(testStr))
-                {
-                    result++;
-                }
+                var parts = l.Split(' ');
 
-                continue;
-            }
-
-            stack.Push(ReplaceCharAtIndex(testStr, firstUnknownIdx, '#'));
-            stack.Push(ReplaceCharAtIndex(testStr, firstUnknownIdx, '.'));
-        }
-
-        return result;
-    }
-
-    private bool IsValid(string testRecords)
-    {
-        var testDamagedSprings = testRecords
-            .Split('.', StringSplitOptions.RemoveEmptyEntries)
-            .Select(segment => segment.Length)
+                // This time the input is repeated 5 times
+                var records = Repeat(parts[0], repetitions: 5, separator: '?');
+                var damagedSprings = Repeat(parts[1], repetitions: 5, separator: ',')
+                    .Split(',')
+                    .Select(int.Parse)
+                    .ToArray();
+                return new HotSpringsRecords(records, damagedSprings);
+            })
             .ToArray();
-
-        return DamagedSprings.Length == testDamagedSprings.Length
-            && DamagedSprings.SequenceEqual(testDamagedSprings);
     }
 
-    private static string ReplaceCharAtIndex(string content, int index, char replacement)
+    private static string Repeat(string value, int repetitions, char separator)
     {
-        // TODO: Use spans
-        var stringBuilder = new StringBuilder(content);
-        stringBuilder[index] = replacement;
-
-        return stringBuilder.ToString();
+        return string.Join(separator, Enumerable.Repeat(value, repetitions));
     }
-};
+}
