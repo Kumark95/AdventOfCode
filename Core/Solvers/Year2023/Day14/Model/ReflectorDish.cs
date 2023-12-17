@@ -1,4 +1,5 @@
 using AdventOfCode.Common.Extensions;
+using AdventOfCode.Common.Model;
 using System.Security.Cryptography;
 using System.Text;
 

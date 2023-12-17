@@ -1,5 +1,6 @@
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
+using AdventOfCode.Common.Model;
 using AdventOfCode.Core.Solvers.Year2023.Day14.Model;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day14;

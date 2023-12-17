@@ -4,6 +4,9 @@ namespace AdventOfCode.Common.Extensions;
 
 public static class MapExtensions
 {
+    public static int RowLength<T>(this T[,] map) => map.GetLength(0);
+    public static int ColLength<T>(this T[,] map) => map.GetLength(1);
+
     public static bool IsValidPosition<T>(this T[,] map, int row, int col)
     {
         return row >= 0
@@ -18,6 +21,18 @@ public static class MapExtensions
             && position.Row < map.GetLength(0)
             && position.Col >= 0
             && position.Col < map.GetLength(1);
+    }
+
+    public static Position Move<T>(this T[,] _, Position position, Direction direction)
+    {
+        return direction switch
+        {
+            Direction.Up => position with { Row = position.Row - 1 },
+            Direction.Down => position with { Row = position.Row + 1 },
+            Direction.Left => position with { Col = position.Col - 1 },
+            Direction.Right => position with { Col = position.Col + 1 },
+            _ => throw new InvalidOperationException()
+        };
     }
 
     public static IEnumerable<(Position Position, T Value)> GetAllNeighbours<T>(this T[,] map, int row, int col, MapConnectivity connectivity)
@@ -76,6 +91,26 @@ public static class MapExtensions
 
             var adjCharacter = map[adjPosition.Row, adjPosition.Col];
             yield return (adjPosition, adjCharacter);
+        }
+    }
+
+    public static IEnumerable<Position> GetAllEdgePositions<T>(this T[,] map)
+    {
+        var rowLength = map.RowLength();
+        var colLength = map.ColLength();
+
+        for (int col = 0; col < colLength; col++)
+        {
+            // Return top and bottom rows
+            yield return new Position(0, col);
+            yield return new Position(rowLength - 1, col);
+        }
+
+        // Skip the first and last rows
+        for (int row = 1; row < rowLength - 1; row++)
+        {
+            yield return new Position(row, 0);
+            yield return new Position(row, colLength - 1);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Core.Solvers.Year2023.Day14.Model;
+namespace AdventOfCode.Common.Model;
 
 public enum Direction
 {
