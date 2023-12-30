@@ -9,6 +9,14 @@ internal class CrucibleMap
     private readonly int[,] _map;
     private readonly Dictionary<MapState, int> _cost;
 
+    private readonly Dictionary<Direction, (int RowInc, int ColInc)> _dirIncrements = new()
+    {
+        { Direction.Up, (-1, 0) },
+        { Direction.Down, (1, 0) },
+        { Direction.Left, (0, -1) },
+        { Direction.Right, (0, 1) },
+    };
+
     private readonly record struct MapState(Position Pos, Direction Dir, int SameDirSteps);
 
     public CrucibleMap(int[,] map)
@@ -64,26 +72,9 @@ internal class CrucibleMap
 
     private IEnumerable<MapState> GetAdjacentStates(MapState state, int minStraightMoves, int maxStraightMoves)
     {
-        var dirIncrements = new Dictionary<Direction, (int RowInc, int ColInc)>()
+        foreach (var (adjDirection, (rowInc, colInc)) in _dirIncrements)
         {
-            { Direction.Up, (-1, 0) },
-            { Direction.Down, (1, 0) },
-            { Direction.Left, (0, -1) },
-            { Direction.Right, (0, 1) },
-        };
-
-        var inverseDirections = new Dictionary<Direction, Direction>()
-        {
-            { Direction.Up, Direction.Down },
-            { Direction.Down, Direction.Up },
-            { Direction.Left, Direction.Right},
-            { Direction.Right, Direction.Left },
-        };
-
-        // TODO: Refactor
-        foreach (var (adjDirection, (rowInc, colInc)) in dirIncrements)
-        {
-            if (adjDirection == inverseDirections[state.Dir])
+            if (adjDirection.IsOposite(state.Dir))
             {
                 continue;
             }
@@ -92,22 +83,12 @@ internal class CrucibleMap
                     ? state.SameDirSteps + 1
                     : 1;
 
-            if (state.Dir == adjDirection)
+            if ((state.Dir == adjDirection && adjSameDirSteps > maxStraightMoves)
+                || (state.Dir != adjDirection && state.SameDirSteps < minStraightMoves))
             {
-                // Go straight
-                if (adjSameDirSteps > maxStraightMoves)
-                {
-                    continue;
-                }
+                continue;
             }
-            else
-            {
-                // Go to the sides
-                if (state.SameDirSteps < minStraightMoves)
-                {
-                    continue;
-                }
-            }
+
 
             var adjPosition = new Position(state.Pos.Row + rowInc, state.Pos.Col + colInc);
             if (!_map.IsValidPosition(adjPosition))
