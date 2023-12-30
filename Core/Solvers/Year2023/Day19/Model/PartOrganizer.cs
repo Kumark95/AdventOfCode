@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using Rating = System.Collections.Generic.Dictionary<char, int>;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 
@@ -17,7 +18,7 @@ internal class PartOrganizer
         _workflows = workflows;
     }
 
-    public long CalculateTotalRating(List<Dictionary<char, int>> ratings)
+    public long CalculateTotalRating(List<Rating> ratings)
     {
         var total = 0;
         foreach (var rating in ratings)
@@ -31,7 +32,7 @@ internal class PartOrganizer
         return total;
     }
 
-    private Result EvaluateRating(Dictionary<char, int> rating)
+    private Result EvaluateRating(Rating rating)
     {
         // Always start with the "in" workflow
         var stack = new Stack<string>();

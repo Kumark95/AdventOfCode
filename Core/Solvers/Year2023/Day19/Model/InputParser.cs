@@ -1,12 +1,12 @@
 using System.Diagnostics;
 using System.Text.RegularExpressions;
+using Rating = System.Collections.Generic.Dictionary<char, int>;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 
 internal static partial class InputParser
 {
-    // TODO: Check type aliases
-    public static (Dictionary<string, ConditionExpression[]> Workflows, List<Dictionary<char, int>> Ratings) ParseInput(string[] inputLines)
+    public static (Dictionary<string, ConditionExpression[]> Workflows, List<Rating> Ratings) ParseInput(string[] inputLines)
     {
         var dividerIdx = Array.IndexOf(inputLines, "");
 
@@ -48,7 +48,7 @@ internal static partial class InputParser
 
         // Parse the ratings now
         var ratingRegex = RatingRegex();
-        var ratings = new List<Dictionary<char, int>>();
+        var ratings = new List<Rating>();
         foreach (var line in inputLines[(dividerIdx + 1)..])
         {
             var match = ratingRegex.Match(line);
@@ -57,7 +57,7 @@ internal static partial class InputParser
                 throw new InvalidOperationException("Could not extract rating data");
             }
 
-            var rating = new Dictionary<char, int>
+            var rating = new Rating
             {
                 { 'x', int.Parse(match.Groups["X"].Value) },
                 { 'm', int.Parse(match.Groups["M"].Value) },
