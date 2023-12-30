@@ -4,9 +4,9 @@ namespace AdventOfCode.Core.Solvers.Year2023.Day18.Model;
 
 internal class Polygon
 {
-    private readonly LongPosition[] _positions;
+    private readonly Position[] _positions;
 
-    public Polygon(IEnumerable<LongPosition> positions)
+    public Polygon(IEnumerable<Position> positions)
     {
         if (positions.Last() != positions.First())
         {

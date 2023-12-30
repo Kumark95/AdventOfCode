@@ -15,12 +15,12 @@ internal class DigPlan
     public long CalculateLagoonCapacity()
     {
         var trenchLength = 0L;
-        var prevPosition = new LongPosition(0, 0);
-        var positions = new List<LongPosition> { prevPosition };
+        var prevPosition = new Position(0, 0);
+        var positions = new List<Position> { prevPosition };
 
         foreach (var instruction in _instructions)
         {
-            var newPosition = prevPosition + (LongPosition)instruction.Direction.DirectionIncrement() * instruction.Steps;
+            var newPosition = prevPosition + (Position)instruction.Direction.DirectionIncrement() * instruction.Steps;
             positions.Add(newPosition);
 
             prevPosition = newPosition;
