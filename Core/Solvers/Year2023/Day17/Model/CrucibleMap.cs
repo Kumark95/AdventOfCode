@@ -1,90 +1,64 @@
 using AdventOfCode.Common.Extensions;
 using AdventOfCode.Common.Model;
+using System.Diagnostics;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day17.Model;
 
 internal class CrucibleMap
 {
     private readonly int[,] _map;
-    private readonly Dictionary<(Position, Direction), bool> _visited;
-    private readonly Dictionary<Position, int> _cost;
+    private readonly Dictionary<MapState, int> _cost;
+
+    private readonly record struct MapState(Position Pos, Direction Dir, int SameDirSteps);
 
     public CrucibleMap(int[,] map)
     {
         _map = map;
-        _visited = new Dictionary<(Position, Direction), bool>();
-        _cost = new Dictionary<Position, int>();
+        _cost = new Dictionary<MapState, int>();
     }
 
-    /// <summary>
-    /// Part one calculation
-    /// </summary>
-    public int CalculateMinimumHeatLoss()
+    public int CalculateMinimumHeatLoss(int minStraightMoves, int maxStraightMoves)
     {
         var origin = new Position(0, 0);
         var destination = new Position(_map.RowLength() - 1, _map.ColLength() - 1);
 
-        return MinimumCost(origin, destination);
+        return MinimumCost(origin, destination, minStraightMoves, maxStraightMoves);
     }
 
-    public int MinimumCost(Position origin, Position destination)
+    public int MinimumCost(Position origin, Position destination, int minStraightMoves, int maxStraightMoves)
     {
-        // Init the cost to "infinity"
-        for (int row = 0; row < _map.RowLength(); row++)
-        {
-            for (int col = 0; col < _map.ColLength(); col++)
-            {
-                var position = new Position(row, col);
-                _cost[position] = int.MaxValue;
-            }
-        }
-
         // Base condition
-        _cost[origin] = 0;
-
-        var maxStraightMoves = 3;
+        var startRightState = new MapState(origin, Direction.Right, 0);
+        _cost[startRightState] = 0;
 
         // Store the position, the current direction and the steps from the last turn as the key
-        var queue = new PriorityQueue<(Position Position, Direction CurrentDir, int SameDirSteps), int>();
-        queue.Enqueue((origin, Direction.Right, 0), priority: 0);
-        queue.Enqueue((origin, Direction.Down, 0), priority: 0);
+        var queue = new PriorityQueue<MapState, int>();
+        queue.Enqueue(startRightState, priority: 0);
 
         while (queue.Count > 0)
         {
-            var (currentPos, currentDir, sameDirSteps) = queue.Dequeue();
-            _visited[(currentPos, currentDir)] = true;
-
-            foreach (var (adjDir, adjPos) in GetNeighbours(currentPos))
+            var currentState = queue.Dequeue();
+            if (currentState.Pos == destination)
             {
-                if (_visited.ContainsKey((adjPos, adjDir)))
+                return _cost[currentState];
+            }
+
+            foreach (var adjState in GetAdjacentStates(currentState, minStraightMoves, maxStraightMoves))
+            {
+                var adjCost = _map[adjState.Pos.Row, adjState.Pos.Col];
+                if (!_cost.ContainsKey(adjState) || _cost[adjState] > _cost[currentState] + adjCost)
                 {
-                    continue;
-                }
+                    _cost[adjState] = _cost[currentState] + adjCost;
 
-                var adjCost = _map[adjPos.Row, adjPos.Col];
-                var adjSameDirSteps = adjDir == currentDir
-                    ? sameDirSteps + 1
-                    : 0;
-
-                if (adjSameDirSteps > maxStraightMoves)
-                {
-                    continue;
-                }
-
-                if (_cost[adjPos] > _cost[currentPos] + adjCost)
-                {
-                    _cost[adjPos] = _cost[currentPos] + adjCost;
-
-                    queue.Enqueue((adjPos, adjDir, adjSameDirSteps), _cost[adjPos]);
+                    queue.Enqueue(adjState, _cost[adjState]);
                 }
             }
         }
 
-        return _cost[destination];
+        throw new UnreachableException();
     }
 
-    // TODO: Update generic method
-    private IEnumerable<(Direction, Position)> GetNeighbours(Position position)
+    private IEnumerable<MapState> GetAdjacentStates(MapState state, int minStraightMoves, int maxStraightMoves)
     {
         var dirIncrements = new Dictionary<Direction, (int RowInc, int ColInc)>()
         {
@@ -94,15 +68,50 @@ internal class CrucibleMap
             { Direction.Right, (0, 1) },
         };
 
-        foreach (var (direction, (rowInc, colInc)) in dirIncrements)
+        var inverseDirections = new Dictionary<Direction, Direction>()
         {
-            var nextPosition = new Position(position.Row + rowInc, position.Col + colInc);
-            if (!_map.IsValidPosition(nextPosition))
+            { Direction.Up, Direction.Down },
+            { Direction.Down, Direction.Up },
+            { Direction.Left, Direction.Right},
+            { Direction.Right, Direction.Left },
+        };
+
+        // TODO: Refactor
+        foreach (var (adjDirection, (rowInc, colInc)) in dirIncrements)
+        {
+            if (adjDirection == inverseDirections[state.Dir])
             {
                 continue;
             }
 
-            yield return (direction, nextPosition);
+            var adjSameDirSteps = state.Dir == adjDirection
+                    ? state.SameDirSteps + 1
+                    : 1;
+
+            if (state.Dir == adjDirection)
+            {
+                // Go straight
+                if (adjSameDirSteps > maxStraightMoves)
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                // Go to the sides
+                if (state.SameDirSteps < minStraightMoves)
+                {
+                    continue;
+                }
+            }
+
+            var adjPosition = new Position(state.Pos.Row + rowInc, state.Pos.Col + colInc);
+            if (!_map.IsValidPosition(adjPosition))
+            {
+                continue;
+            }
+
+            yield return new MapState(adjPosition, adjDirection, adjSameDirSteps);
         }
     }
 }

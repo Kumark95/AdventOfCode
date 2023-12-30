@@ -11,18 +11,20 @@ public sealed class PuzzleSolver : IPuzzleSolver
     public int Day => 17;
 
     [PuzzleInput(filename: "example.txt", expectedResult: 102)]
-    [PuzzleInput(filename: "input.txt", expectedResult: -1)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 870)]
     public long? SolvePartOne(string[] inputLines)
     {
         var crucibleMap = InputParser.ParseInput(inputLines);
 
-        return crucibleMap.CalculateMinimumHeatLoss();
+        return crucibleMap.CalculateMinimumHeatLoss(minStraightMoves: 1, maxStraightMoves: 3);
     }
 
-    [PuzzleInput(filename: "example.txt", expectedResult: -1)]
-    [PuzzleInput(filename: "input.txt", expectedResult: -1)]
+    [PuzzleInput(filename: "example.txt", expectedResult: 94)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 1063)]
     public long? SolvePartTwo(string[] inputLines)
     {
-        return null;
+        var crucibleMap = InputParser.ParseInput(inputLines);
+
+        return crucibleMap.CalculateMinimumHeatLoss(minStraightMoves: 4, maxStraightMoves: 10);
     }
 }
