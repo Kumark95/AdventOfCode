@@ -4,9 +4,9 @@ namespace AdventOfCode.Core.Solvers.Year2023.Day18.Model;
 
 internal class Polygon
 {
-    private readonly Position[] _positions;
+    private readonly LongPosition[] _positions;
 
-    public Polygon(IEnumerable<Position> positions)
+    public Polygon(IEnumerable<LongPosition> positions)
     {
         if (positions.Last() != positions.First())
         {
@@ -28,7 +28,6 @@ internal class Polygon
             var startEdge = _positions[i];
             var endEdge = _positions[i + 1];
 
-            //area += (startEdge.Row * endEdge.Col) - (startEdge.Col * endEdge.Row);
             area += (startEdge.Row + endEdge.Row) * (startEdge.Col - endEdge.Col);
         }
 
