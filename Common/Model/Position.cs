@@ -10,4 +10,9 @@ public readonly record struct Position(int Row, int Col)
         return Math.Abs(Row - target.Row)
             + Math.Abs(Col - target.Col);
     }
+
+    public override string ToString()
+    {
+        return $"[{Row}, {Col}]";
+    }
 }
