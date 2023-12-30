@@ -31,9 +31,13 @@ internal class CrucibleMap
         var startRightState = new MapState(origin, Direction.Right, 0);
         _cost[startRightState] = 0;
 
+        var startDownState = new MapState(origin, Direction.Down, 0);
+        _cost[startDownState] = 0;
+
         // Store the position, the current direction and the steps from the last turn as the key
         var queue = new PriorityQueue<MapState, int>();
         queue.Enqueue(startRightState, priority: 0);
+        queue.Enqueue(startDownState, priority: 0);
 
         while (queue.Count > 0)
         {
@@ -46,7 +50,7 @@ internal class CrucibleMap
             foreach (var adjState in GetAdjacentStates(currentState, minStraightMoves, maxStraightMoves))
             {
                 var adjCost = _map[adjState.Pos.Row, adjState.Pos.Col];
-                if (!_cost.ContainsKey(adjState) || _cost[adjState] > _cost[currentState] + adjCost)
+                if (!_cost.TryGetValue(adjState, out int prevAdjCost) || prevAdjCost > _cost[currentState] + adjCost)
                 {
                     _cost[adjState] = _cost[currentState] + adjCost;
 
