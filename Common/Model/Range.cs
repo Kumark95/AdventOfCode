@@ -50,4 +50,9 @@ public readonly record struct Range<T>(T Start, T End) where T : INumber<T>
 
         return Array.Empty<Range<T>>();
     }
+
+    public override string ToString()
+    {
+        return $"[{Start}, {End}]";
+    }
 }

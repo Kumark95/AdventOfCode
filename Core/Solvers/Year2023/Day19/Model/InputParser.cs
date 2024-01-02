@@ -6,7 +6,7 @@ namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 
 internal static partial class InputParser
 {
-    public static (Dictionary<string, ConditionExpression[]> Workflows, List<Rating> Ratings) ParseInput(string[] inputLines)
+    public static (Dictionary<string, ConditionExpression[]> Workflows, List<Rating> Ratings) ParseInput(string[] inputLines, bool parseRatings)
     {
         var dividerIdx = Array.IndexOf(inputLines, "");
 
@@ -44,6 +44,11 @@ internal static partial class InputParser
             expressions.Add(new ConditionExpression(null, null, null, conditionTexts.Last()));
 
             workflows.Add(workflowName, expressions.ToArray());
+        }
+
+        if (!parseRatings)
+        {
+            return (workflows, []);
         }
 
         // Parse the ratings now
