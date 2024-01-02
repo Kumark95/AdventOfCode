@@ -31,7 +31,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
         // Explore all the accepted combinations from 1 to 4000 for each part category
         var initialRange = new Range<int>(1, 4000);
-        var initialRatingRange = new RatingRange(x: initialRange, m: initialRange, a: initialRange, s: initialRange);
+        var initialRatingRange = new Rating(x: initialRange, m: initialRange, a: initialRange, s: initialRange);
 
         var acceptedCombinations = organizer.AcceptedCombinations(initialRatingRange);
         Console.WriteLine(acceptedCombinations);

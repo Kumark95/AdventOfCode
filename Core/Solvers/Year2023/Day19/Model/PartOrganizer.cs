@@ -7,12 +7,14 @@ internal class PartOrganizer
 {
     private readonly Dictionary<string, ConditionExpression[]> _workflows;
 
+    private readonly record struct State(Rating Rating, string Workflow, int ExpressionIndex);
+
     public PartOrganizer(Dictionary<string, ConditionExpression[]> workflows)
     {
         _workflows = workflows;
     }
 
-    public long CalculateTotalRating(List<RatingRange> ratings)
+    public long CalculateTotalRating(List<Rating> ratings)
     {
         var total = 0;
         foreach (var rating in ratings)
@@ -31,11 +33,11 @@ internal class PartOrganizer
         return total;
     }
 
-    public ulong AcceptedCombinations(RatingRange initialRating)
+    public ulong AcceptedCombinations(Rating initialRating)
     {
         // Always start with the "in" workflow
-        var stack = new Stack<(RatingRange, string, int)>();
-        stack.Push((initialRating, "in", 0));
+        var stack = new Stack<State>();
+        stack.Push(new(initialRating, Workflow: "in", ExpressionIndex: 0));
 
         ulong total = 0;
 
@@ -63,7 +65,7 @@ internal class PartOrganizer
                 }
                 else
                 {
-                    stack.Push((rating, expression.Destination, 0));
+                    stack.Push(new(rating, expression.Destination, 0));
                 }
             }
             else
@@ -90,13 +92,13 @@ internal class PartOrganizer
                         }
                         else
                         {
-                            stack.Push((newRating, expression.Destination, 0));
+                            stack.Push(new(newRating, expression.Destination, 0));
                         }
                     }
                     else
                     {
                         // Send to the same workflow but to evaluate the next expression
-                        stack.Push((newRating, workflowName, expressionIdx + 1));
+                        stack.Push(new(newRating, workflowName, expressionIdx + 1));
                     }
                 }
             }

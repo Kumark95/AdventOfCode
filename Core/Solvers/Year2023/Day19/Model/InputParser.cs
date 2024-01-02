@@ -5,7 +5,7 @@ namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 
 internal static partial class InputParser
 {
-    public static (Dictionary<string, ConditionExpression[]> Workflows, List<RatingRange> Ratings) ParseInput(string[] inputLines, bool parseRatings)
+    public static (Dictionary<string, ConditionExpression[]> Workflows, List<Rating> Ratings) ParseInput(string[] inputLines, bool parseRatings)
     {
         var dividerIdx = Array.IndexOf(inputLines, "");
 
@@ -52,7 +52,7 @@ internal static partial class InputParser
 
         // Parse the ratings now
         var ratingRegex = RatingRegex();
-        var ratings = new List<RatingRange>();
+        var ratings = new List<Rating>();
         foreach (var line in inputLines[(dividerIdx + 1)..])
         {
             var match = ratingRegex.Match(line);
@@ -67,7 +67,7 @@ internal static partial class InputParser
             var s = int.Parse(match.Groups["S"].Value);
 
             // Using a range of a single element
-            var rating = new RatingRange(x: new(x, x), m: new(m, m), a: new(a, a), s: new(s, s));
+            var rating = new Rating(x: new(x, x), m: new(m, m), a: new(a, a), s: new(s, s));
 
             ratings.Add(rating);
         }

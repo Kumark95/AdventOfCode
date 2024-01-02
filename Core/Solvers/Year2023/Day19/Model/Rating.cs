@@ -2,11 +2,11 @@ using AdventOfCode.Common.Model;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 
-internal class RatingRange
+internal class Rating
 {
     private readonly Dictionary<char, Range<int>> _values = new();
 
-    public RatingRange(Range<int> x, Range<int> m, Range<int> a, Range<int> s)
+    public Rating(Range<int> x, Range<int> m, Range<int> a, Range<int> s)
     {
         _values['x'] = x;
         _values['m'] = m;
@@ -14,9 +14,9 @@ internal class RatingRange
         _values['s'] = s;
     }
 
-    public RatingRange With(char part, Range<int> range)
+    public Rating With(char part, Range<int> range)
     {
-        return new RatingRange(
+        return new Rating(
             part == 'x' ? range : _values['x'],
             part == 'm' ? range : _values['m'],
             part == 'a' ? range : _values['a'],
