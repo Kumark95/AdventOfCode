@@ -1,4 +1,4 @@
-﻿using AdventOfCode.Common.Model;
+using AdventOfCode.Common.Model;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 

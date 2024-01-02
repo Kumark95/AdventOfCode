@@ -1,7 +1,5 @@
 using AdventOfCode.Common.Model;
-using System.Diagnostics;
 using System.Numerics;
-using Rating = System.Collections.Generic.Dictionary<char, int>;
 
 namespace AdventOfCode.Core.Solvers.Year2023.Day19.Model;
 
@@ -9,94 +7,28 @@ internal class PartOrganizer
 {
     private readonly Dictionary<string, ConditionExpression[]> _workflows;
 
-    private enum Result
-    {
-        Accepted,
-        Rejected
-    }
-
     public PartOrganizer(Dictionary<string, ConditionExpression[]> workflows)
     {
         _workflows = workflows;
     }
 
-    public long CalculateTotalRating(List<Rating> ratings)
+    public long CalculateTotalRating(List<RatingRange> ratings)
     {
         var total = 0;
         foreach (var rating in ratings)
         {
-            if (EvaluateRating(rating) == Result.Accepted)
+            var acceptedCombinations = AcceptedCombinations(rating);
+            if (acceptedCombinations == 1)
             {
-                total += rating.Values.Sum();
+                // Since the ranges consist of a single value we can access the value directly
+                total += rating.GetRange('x').Start
+                    + rating.GetRange('m').Start
+                    + rating.GetRange('a').Start
+                    + rating.GetRange('s').Start;
             }
         }
 
         return total;
-    }
-
-    private Result EvaluateRating(Rating rating)
-    {
-        // Always start with the "in" workflow
-        var stack = new Stack<string>();
-        stack.Push("in");
-
-        while (stack.Count > 0)
-        {
-            var expressions = _workflows[stack.Pop()];
-
-            // Evaluate the conditions
-            foreach (var expression in expressions)
-            {
-                if (expression.SendDirectly)
-                {
-                    if (expression.Destination == "A")
-                    {
-                        return Result.Accepted;
-                    }
-                    else if (expression.Destination == "R")
-                    {
-                        return Result.Rejected;
-                    }
-                    else
-                    {
-                        stack.Push(expression.Destination);
-                    }
-                }
-                else
-                {
-                    int partValue = rating[(char)expression.PartCategory!];
-                    int expressionValue = (int)expression.Value!;
-
-                    // Evaluate
-                    var conditionMatched = expression.Condition switch
-                    {
-                        Condition.LessThan => partValue < expressionValue,
-                        Condition.GreaterThan => partValue > expressionValue,
-                        _ => throw new UnreachableException()
-                    };
-
-                    if (conditionMatched)
-                    {
-                        if (expression.Destination == "A")
-                        {
-                            return Result.Accepted;
-                        }
-                        else if (expression.Destination == "R")
-                        {
-                            return Result.Rejected;
-                        }
-                        else
-                        {
-                            // Need to stop the evaluation of the rest of expressions
-                            stack.Push(expression.Destination);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        throw new UnreachableException();
     }
 
     public ulong AcceptedCombinations(RatingRange initialRating)
