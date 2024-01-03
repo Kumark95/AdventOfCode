@@ -46,7 +46,7 @@ internal sealed class PuzzleSolverService
         return solvers.SingleOrDefault(s => s.Year == year && s.Day == day);
     }
 
-    private void FetchInputsAndSolve(string solverDirectory, IEnumerable<PuzzleInput> inputs, Func<string[], long?> solverMethod)
+    private void FetchInputsAndSolve(string solverDirectory, IEnumerable<PuzzleInput> inputs, Func<string[], object> solverMethod)
     {
         if (!inputs.Any())
         {
@@ -72,7 +72,8 @@ internal sealed class PuzzleSolverService
                 break;
             }
 
-            var resultMatch = executionData.Result == input.ExpectedResult
+            // Converting both to the same type to ensure that the equality does not faile with ints/longs
+            var resultMatch = Convert.ToUInt64(executionData.Result) == input.ExpectedResult
                 ? "PASS"
                 : "FAIL";
 
@@ -91,7 +92,7 @@ internal sealed class PuzzleSolverService
         }
     }
 
-    private static ExecutionData ExecuteAndMeasure(Func<long?> calculation)
+    private static ExecutionData ExecuteAndMeasure(Func<object> calculation)
     {
         var startMemory = 0L;
         using (Process proc = Process.GetCurrentProcess())

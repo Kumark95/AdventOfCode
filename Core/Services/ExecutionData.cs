@@ -1,3 +1,3 @@
-﻿namespace AdventOfCode.Core.Services;
+namespace AdventOfCode.Core.Services;
 
-internal readonly record struct ExecutionData(long? Result, TimeSpan ExecutionTime, long MemoryUsed);
+internal readonly record struct ExecutionData(object Result, TimeSpan ExecutionTime, long MemoryUsed);

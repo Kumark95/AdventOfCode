@@ -4,9 +4,9 @@ namespace AdventOfCode.Common.Attributes;
 public class PuzzleInput : Attribute
 {
     public string Filename { get; private set; }
-    public long? ExpectedResult { get; private set; }
+    public ulong ExpectedResult { get; private set; }
 
-    public PuzzleInput(string filename, long expectedResult)
+    public PuzzleInput(string filename, ulong expectedResult)
     {
         Filename = filename;
         ExpectedResult = expectedResult;

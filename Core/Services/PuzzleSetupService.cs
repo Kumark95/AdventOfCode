@@ -54,14 +54,14 @@ internal sealed class PuzzleSetupService
 
                 [PuzzleInput(filename: "example.txt", expectedResult: -1)]
                 [PuzzleInput(filename: "input.txt", expectedResult: -1)]
-                public long? SolvePartOne(string[] inputLines)
+                public object SolvePartOne(string[] inputLines)
                 {
                     return 0;
                 }
 
                 [PuzzleInput(filename: "example.txt", expectedResult: -1)]
                 [PuzzleInput(filename: "input.txt", expectedResult: -1)]
-                public long? SolvePartTwo(string[] inputLines)
+                public object SolvePartTwo(string[] inputLines)
                 {
                     return null;
                 }
