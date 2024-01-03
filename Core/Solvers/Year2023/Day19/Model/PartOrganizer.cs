@@ -112,28 +112,19 @@ internal static class RangeExtensions
 {
     public static List<(Range<T>, bool)> Split<T>(this Range<T> range, Condition condition, T conditionValue) where T : INumber<T>
     {
-        if (!range.Contains(conditionValue))
+        return condition switch
         {
-            return [(range, false)];
-        }
-
-        if (condition == Condition.LessThan)
-        {
-            return [
+            Condition.LessThan when range.Length == T.One => [(range, range.Start < conditionValue)],
+            Condition.LessThan => [
                 (new(range.Start, conditionValue - T.One), true),
                 (new(conditionValue, range.End), false)
-            ];
-        }
-        else if (condition == Condition.GreaterThan)
-        {
-            return [
+            ],
+            Condition.GreaterThan when range.Length == T.One => [(range, range.Start > conditionValue)],
+            Condition.GreaterThan => [
                 (new(range.Start, conditionValue), false),
                 (new(conditionValue + T.One, range.End), true)
-            ];
-        }
-        else
-        {
-            throw new NotImplementedException();
-        }
+            ],
+            _ => throw new NotImplementedException()
+        };
     }
 }

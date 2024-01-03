@@ -22,7 +22,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
     }
 
     [PuzzleInput(filename: "example.txt", expectedResult: 167409079868000)]
-    [PuzzleInput(filename: "input.txt", expectedResult: 1)]
+    [PuzzleInput(filename: "input.txt", expectedResult: 110807725108076)]
     public object SolvePartTwo(string[] inputLines)
     {
         var (workflows, _) = InputParser.ParseInput(inputLines, parseRatings: false);
@@ -33,20 +33,6 @@ public sealed class PuzzleSolver : IPuzzleSolver
         var initialRange = new Range<int>(1, 4000);
         var initialRatingRange = new Rating(x: initialRange, m: initialRange, a: initialRange, s: initialRange);
 
-        var acceptedCombinations = organizer.AcceptedCombinations(initialRatingRange);
-        Console.WriteLine(acceptedCombinations);
-
-        // Note: returning 1 if the result is the expected value as currently the interface cannot handle ulong
-        // TODO: Update the interface. Affects all puzzles :(
-        if (inputLines[0] == "px{a<2006:qkq,m>2090:A,rfg}")
-        {
-            return Convert.ToInt64(acceptedCombinations == 167409079868000);
-        }
-        else if (inputLines[0] == "ljs{s<678:A,s<945:A,x>1416:A,A}")
-        {
-            return Convert.ToInt64(acceptedCombinations == 110807725108076);
-        }
-
-        return -1;
+        return organizer.AcceptedCombinations(initialRatingRange);
     }
 }
