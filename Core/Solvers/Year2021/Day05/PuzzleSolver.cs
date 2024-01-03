@@ -25,13 +25,13 @@ public class PuzzleSolver : IPuzzleSolver
             .Select(group => group.Key)
             .ToList();
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines, excludeDiagonal: true);
         return OverlappingPoints(input).Count();
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var input = Input(inputLines, excludeDiagonal: false);
         return OverlappingPoints(input).Count();

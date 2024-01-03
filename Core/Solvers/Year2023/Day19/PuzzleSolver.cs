@@ -13,7 +13,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 19114)]
     [PuzzleInput(filename: "input.txt", expectedResult: 319295)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var (workflows, ratings) = InputParser.ParseInput(inputLines, parseRatings: true);
 
@@ -21,9 +21,9 @@ public sealed class PuzzleSolver : IPuzzleSolver
         return organizer.CalculateTotalRating(ratings);
     }
 
-    [PuzzleInput(filename: "example.txt", expectedResult: 1)]
+    [PuzzleInput(filename: "example.txt", expectedResult: 167409079868000)]
     [PuzzleInput(filename: "input.txt", expectedResult: 1)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var (workflows, _) = InputParser.ParseInput(inputLines, parseRatings: false);
 

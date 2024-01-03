@@ -66,12 +66,12 @@ public class PuzzleSolver : IPuzzleSolver
             .Select(l => int.Parse(l))
             .ToArray();
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         return CountPreviousLargerItem(Input(inputLines));
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var slidingWindowInput = SlidingWindow(Input(inputLines), window: 3);
         return CountPreviousLargerItem(slidingWindowInput);

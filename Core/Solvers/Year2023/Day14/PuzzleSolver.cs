@@ -13,7 +13,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 136)]
     [PuzzleInput(filename: "input.txt", expectedResult: 105003)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var reflectorDish = InputParser.ParseInput(inputLines);
 
@@ -24,7 +24,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 64)]
     [PuzzleInput(filename: "input.txt", expectedResult: 93742)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var reflectorDish = InputParser.ParseInput(inputLines);
 

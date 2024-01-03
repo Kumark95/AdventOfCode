@@ -12,7 +12,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 288)]
     [PuzzleInput(filename: "input.txt", expectedResult: 771628)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var timeMatches = InputParser.ExtractNumbers(inputLines[0]);
         var distanceMatches = InputParser.ExtractNumbers(inputLines[1]);
@@ -29,7 +29,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 71503)]
     [PuzzleInput(filename: "input.txt", expectedResult: 27363861)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var time = InputParser.ExtractSingleNumber(inputLines[0]);
         var distance = InputParser.ExtractSingleNumber(inputLines[1]);

@@ -10,12 +10,12 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2021;
     public int Day => 24;
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         return ArithmeticLogicUnit.FindModelNumber(inputLines, SearchMode.Maximum);
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         return ArithmeticLogicUnit.FindModelNumber(inputLines, SearchMode.Minimum);
     }

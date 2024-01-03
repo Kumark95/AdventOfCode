@@ -14,7 +14,7 @@ public class PuzzleSolver : IPuzzleSolver
         return new TrenchMap(inputLines[0], inputLines[2..]);
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var map = Input(inputLines);
 
@@ -23,7 +23,7 @@ public class PuzzleSolver : IPuzzleSolver
             .Image.CountLightPixels();
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var map = Input(inputLines);
 

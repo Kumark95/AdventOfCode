@@ -31,7 +31,7 @@ public class PuzzleSolver : IPuzzleSolver
         return fuelSpent.Min();
     }
 
-    public long? SolvePartOne(string[] inputLines) => CalculateLeastFuelUsed(Input(inputLines), i => i);
+    public object SolvePartOne(string[] inputLines) => CalculateLeastFuelUsed(Input(inputLines), i => i);
 
-    public long? SolvePartTwo(string[] inputLines) => CalculateLeastFuelUsed(Input(inputLines), i => TriangularNumber(i));
+    public object SolvePartTwo(string[] inputLines) => CalculateLeastFuelUsed(Input(inputLines), i => TriangularNumber(i));
 }

@@ -40,7 +40,7 @@ public class PuzzleSolver : IPuzzleSolver
         return (numbers, cards);
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var (numbers, cards) = Input(inputLines);
 
@@ -58,7 +58,7 @@ public class PuzzleSolver : IPuzzleSolver
         throw new Exception("No winning card found");
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var (numbers, cards) = Input(inputLines);
 

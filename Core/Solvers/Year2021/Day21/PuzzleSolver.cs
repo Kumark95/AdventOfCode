@@ -25,7 +25,7 @@ public class PuzzleSolver : IPuzzleSolver
         return playerPositions;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var playerPositions = Input(inputLines);
 
@@ -39,7 +39,7 @@ public class PuzzleSolver : IPuzzleSolver
         return result.LosingPlayerScore * result.DieRollCount;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var playerPositions = Input(inputLines);
 

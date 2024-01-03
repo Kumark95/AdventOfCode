@@ -12,7 +12,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 2)]
     [PuzzleInput(filename: "input.txt", expectedResult: 19951)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         NavigationMap map = InputParser.ParseInput(inputLines);
 
@@ -21,7 +21,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 2)]
     [PuzzleInput(filename: "input.txt", expectedResult: 16342438708751)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         NavigationMap map = InputParser.ParseInput(inputLines);
 

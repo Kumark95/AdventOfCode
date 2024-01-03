@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 14;
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var cave = CaveParser.Parse(inputLines, hasFloor: false);
         cave.FallingSand();
@@ -18,7 +18,7 @@ public class PuzzleSolver : IPuzzleSolver
         return cave.SandUnitsAtRest;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var cave = CaveParser.Parse(inputLines, hasFloor: true);
         cave.FallingSand();

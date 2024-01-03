@@ -97,7 +97,7 @@ public class PuzzleSolver : IPuzzleSolver
         return paths;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var adjacencyLists = Input(inputLines);
 
@@ -105,7 +105,7 @@ public class PuzzleSolver : IPuzzleSolver
         return paths.Count;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var adjacencyLists = Input(inputLines);
 

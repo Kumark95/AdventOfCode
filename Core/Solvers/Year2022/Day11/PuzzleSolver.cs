@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 11;
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var monkeyTroop = MonkeyTroop.Parse(inputLines);
         monkeyTroop.PlayRounds(rounds: 20, isWorryReliefActivated: true);
@@ -22,7 +22,7 @@ public class PuzzleSolver : IPuzzleSolver
             .Aggregate((a, b) => a * b);
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var monkeyTroop = MonkeyTroop.Parse(inputLines);
         monkeyTroop.PlayRounds(rounds: 10_000, isWorryReliefActivated: false);

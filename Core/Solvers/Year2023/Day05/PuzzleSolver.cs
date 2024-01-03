@@ -12,7 +12,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 35)]
     [PuzzleInput(filename: "input.txt", expectedResult: 525792406)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var seedNumbers = InputParser.ParseSeedNumbers(inputLines[0]);
         var almanac = InputParser.ParseAlmanac(inputLines[2..]);
@@ -24,7 +24,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 46)]
     [PuzzleInput(filename: "input.txt", expectedResult: 79004094)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var seedRanges = InputParser.ParseSeedRanges(inputLines[0]);
         var almanac = InputParser.ParseAlmanac(inputLines[2..]);

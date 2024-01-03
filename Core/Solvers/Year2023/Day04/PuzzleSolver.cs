@@ -12,7 +12,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 13)]
     [PuzzleInput(filename: "input.txt", expectedResult: 24848)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var result = 0;
 
@@ -27,7 +27,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 30)]
     [PuzzleInput(filename: "input.txt", expectedResult: 7258152)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         // Initialize the dictionary 
         var cardsProcessedByNumber = Enumerable.Range(1, inputLines.Length)

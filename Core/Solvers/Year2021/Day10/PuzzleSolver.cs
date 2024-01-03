@@ -65,7 +65,7 @@ public class PuzzleSolver : IPuzzleSolver
         return (stack, null);
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var result = 0;
 
@@ -81,7 +81,7 @@ public class PuzzleSolver : IPuzzleSolver
         return result;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var completionStringScores = new List<long>();
 

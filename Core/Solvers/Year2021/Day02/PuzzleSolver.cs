@@ -20,7 +20,7 @@ public class PuzzleSolver : IPuzzleSolver
 
     private List<string> Input(string[] inputLines) => inputLines.ToList();
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var position = 0;
         var depth = 0;
@@ -56,7 +56,7 @@ public class PuzzleSolver : IPuzzleSolver
         return position * depth;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var aim = 0;
         var position = 0;

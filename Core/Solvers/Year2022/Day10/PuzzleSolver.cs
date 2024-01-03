@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 10;
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var registerX = 1;
         var cycleCounter = 1;
@@ -51,7 +51,7 @@ public class PuzzleSolver : IPuzzleSolver
         return result;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var crt = new CRT();
 

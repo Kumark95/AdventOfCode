@@ -12,7 +12,7 @@ public class PuzzleSolver : IPuzzleSolver
 
     private List<string> Input(string[] inputLines) => inputLines.ToList();
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var inputData = Input(inputLines);
 
@@ -38,7 +38,7 @@ public class PuzzleSolver : IPuzzleSolver
         return gamma * epsilon;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var inputData = Input(inputLines);
 

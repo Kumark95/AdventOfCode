@@ -20,7 +20,7 @@ public class PuzzleSolver : IPuzzleSolver
         return school.SimulateReproduction(days).Count();
     }
 
-    public long? SolvePartOne(string[] inputLines) => CalculateSchoolSize(inputLines, days: 80);
+    public object SolvePartOne(string[] inputLines) => CalculateSchoolSize(inputLines, days: 80);
 
-    public long? SolvePartTwo(string[] inputLines) => CalculateSchoolSize(inputLines, days: 256);
+    public object SolvePartTwo(string[] inputLines) => CalculateSchoolSize(inputLines, days: 256);
 }

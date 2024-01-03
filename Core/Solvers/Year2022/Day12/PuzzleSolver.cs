@@ -10,13 +10,13 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 12;
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var maze = Maze.Parse(inputLines);
         return maze.FindShortestDistance(maze.StartPosition, maze.EndPosition);
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var maze = Maze.Parse(inputLines);
 

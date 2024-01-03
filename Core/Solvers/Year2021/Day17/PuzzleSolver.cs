@@ -79,7 +79,7 @@ public class PuzzleSolver : IPuzzleSolver
         return null;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var targetArea = Input(inputLines);
         var initialPosition = new Point(0, 0);
@@ -103,7 +103,7 @@ public class PuzzleSolver : IPuzzleSolver
         return maxReachedY;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var targetArea = Input(inputLines);
         var initialPosition = new Point(0, 0);

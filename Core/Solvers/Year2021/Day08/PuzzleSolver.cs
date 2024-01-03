@@ -40,7 +40,7 @@ public class PuzzleSolver : IPuzzleSolver
         return displayReadings;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var counter = 0;
 
@@ -56,7 +56,7 @@ public class PuzzleSolver : IPuzzleSolver
         return counter;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var counter = 0;
 

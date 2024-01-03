@@ -32,14 +32,14 @@ public class PuzzleSolver : IPuzzleSolver
         return list;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var calorieSumList = CalculateCalorieSum(inputLines);
 
         return calorieSumList.Max();
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var calorieSumList = CalculateCalorieSum(inputLines);
 

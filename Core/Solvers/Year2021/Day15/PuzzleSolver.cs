@@ -66,7 +66,7 @@ public class PuzzleSolver : IPuzzleSolver
         return map;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var map = Input(inputLines);
 
@@ -74,7 +74,7 @@ public class PuzzleSolver : IPuzzleSolver
         return dijkstra.MinimumCost(new Point(0, 0), new Point(map.GetLength(0) - 1, map.GetLength(1) - 1));
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var map = InputExpanded(inputLines, rounds: 5);
 

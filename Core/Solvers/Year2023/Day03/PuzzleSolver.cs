@@ -12,7 +12,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 4361)]
     [PuzzleInput(filename: "input.txt", expectedResult: 527446)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         return EngineSchematic.Parse(inputLines)
             .CalculateTotalPartNumber();
@@ -20,7 +20,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example.txt", expectedResult: 467835)]
     [PuzzleInput(filename: "input.txt", expectedResult: 73201705)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         return EngineSchematic.Parse(inputLines)
             .CalculateTotalGearRatio();

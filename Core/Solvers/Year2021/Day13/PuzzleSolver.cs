@@ -96,7 +96,7 @@ internal class PuzzleSolver : IPuzzleSolver
         }
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var (markedPositions, foldInstructions) = Input(inputLines);
 
@@ -107,7 +107,7 @@ internal class PuzzleSolver : IPuzzleSolver
         return newMarkedPositions.Count;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var (markedPositions, foldInstructions) = Input(inputLines);
 

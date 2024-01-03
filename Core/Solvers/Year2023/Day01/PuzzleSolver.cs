@@ -11,7 +11,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example-1.txt", expectedResult: 142)]
     [PuzzleInput(filename: "input.txt", expectedResult: 55538)]
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         return inputLines
             .Select(ExtractSimpleCalibrationValue)
@@ -20,7 +20,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
     [PuzzleInput(filename: "example-2.txt", expectedResult: 281)]
     [PuzzleInput(filename: "input.txt", expectedResult: 54875)]
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         return inputLines
             .Select(ExtractComplexCalibrationValue)

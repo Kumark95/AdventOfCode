@@ -10,7 +10,7 @@ public class PuzzleSolver : IPuzzleSolver
     public int Year => 2022;
     public int Day => 9;
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var instructions = inputLines
             .Select(MovementInstruction.Parse)
@@ -25,7 +25,7 @@ public class PuzzleSolver : IPuzzleSolver
         return rope.UniqueTailPositionCount();
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var instructions = inputLines
             .Select(MovementInstruction.Parse)

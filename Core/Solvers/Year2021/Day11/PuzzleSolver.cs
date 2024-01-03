@@ -105,7 +105,7 @@ public class PuzzleSolver : IPuzzleSolver
         return flashesRecorded;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var input = Input(inputLines);
 
@@ -119,7 +119,7 @@ public class PuzzleSolver : IPuzzleSolver
         return result;
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var input = Input(inputLines);
 

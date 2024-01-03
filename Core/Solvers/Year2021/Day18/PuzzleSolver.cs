@@ -22,7 +22,7 @@ public class PuzzleSolver : IPuzzleSolver
         return trees;
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var resultingTree = Input(inputLines)
             .Aggregate((a, b) => TreeNode.Add(a, b));
@@ -30,7 +30,7 @@ public class PuzzleSolver : IPuzzleSolver
         return resultingTree.Magnitude();
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var maxMagnitude = 0;
         var availableTrees = Input(inputLines);

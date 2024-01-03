@@ -78,14 +78,14 @@ internal class PuzzleSolver : IPuzzleSolver
         return frequencyCounts.Max() - frequencyCounts.Min();
     }
 
-    public long? SolvePartOne(string[] inputLines)
+    public object SolvePartOne(string[] inputLines)
     {
         var (polymerTemplate, insertionElements) = Input(inputLines);
 
         return PairInsertion(polymerTemplate, insertionElements, 10);
     }
 
-    public long? SolvePartTwo(string[] inputLines)
+    public object SolvePartTwo(string[] inputLines)
     {
         var (polymerTemplate, insertionElements) = Input(inputLines);
 
