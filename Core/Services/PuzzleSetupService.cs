@@ -52,15 +52,15 @@ internal sealed class PuzzleSetupService
                 public int Year => {{year}};
                 public int Day => {{day}};
 
-                [PuzzleInput(filename: "example.txt", expectedResult: -1)]
-                [PuzzleInput(filename: "input.txt", expectedResult: -1)]
+                [PuzzleInput(filename: "example.txt", expectedResult: 999_999_999_999)]
+                [PuzzleInput(filename: "input.txt", expectedResult: 999_999_999_999)]
                 public object SolvePartOne(string[] inputLines)
                 {
                     return 0;
                 }
 
-                [PuzzleInput(filename: "example.txt", expectedResult: -1)]
-                [PuzzleInput(filename: "input.txt", expectedResult: -1)]
+                [PuzzleInput(filename: "example.txt", expectedResult: 999_999_999_999)]
+                [PuzzleInput(filename: "input.txt", expectedResult: 999_999_999_999)]
                 public object SolvePartTwo(string[] inputLines)
                 {
                     return null;
