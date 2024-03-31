@@ -27,6 +27,23 @@ internal sealed partial class AdventOfCodeService
         _httpClient.DefaultRequestHeaders.Add("Cookie", sessionCookie);
     }
 
+    public static bool IsValidDay(int year, int day)
+    {
+        var now = DateTimeOffset.Now;
+        if (year < 2015 || year > now.Year || day < 1 || day > 25)
+        {
+            return false;
+        }
+
+        // Check if it's not December or if the day has not yet arrived
+        if (year == now.Year && (now.Month != 12 || day > now.Day))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public async Task<string?> GetPuzzleName(int year, int day)
     {
         _logger.LogInformation("Requesting puzzle description");

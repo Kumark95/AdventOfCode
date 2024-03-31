@@ -46,6 +46,13 @@ var solverDirectory = Path.Join(projectDirectory, "Solvers", $"Year{targetYear:D
 var logger = host.Services.GetRequiredService<ILogger<Program>>();
 var puzzleSolverService = host.Services.GetRequiredService<PuzzleSolverService>();
 
+// Validate
+if (!AdventOfCodeService.IsValidDay(targetYear, targetDay))
+{
+    logger.LogWarning("Invalid day/year");
+    return;
+}
+
 // Solve the puzzle
 logger.LogInformation("Solving day {Day} of year {Year}", targetDay, targetYear);
 var solver = puzzleSolverService.FindSolver(targetYear, targetDay);
