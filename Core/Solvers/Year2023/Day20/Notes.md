@@ -1,12 +1,7 @@
 # Notes
 
-## WIP ideas
-- Queue with Sender, Receiver, Pulse
-- Dict with the name -> Module
-- List with inputs and outputs (names from input)
-
-- When dequeue
-    - Update Receiver state: (Pulse, Module sender)
-	- Loop Receiver outputs
-        - Enqueue?
-        - Somehow check if it should send the signal to a given output
+## Part 2
+- The `rx` module has only one input, a conjunction module
+- The inputs of this conjunction module are also conjunction modules
+- For a conjunction module to send a low pulse, all its inputs must have sent a high pulse
+- The problem requires tracking how many button presses is required for each conjunction module and then calculate the LCM
