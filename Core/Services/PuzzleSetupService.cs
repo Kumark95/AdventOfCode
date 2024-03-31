@@ -44,7 +44,7 @@ internal sealed class PuzzleSetupService
             using AdventOfCode.Common.Interfaces;
             using AdventOfCode.Core.Solvers.Year{{year:D4}}.Day{{day:D2}}.Model;
 
-            namespace AdventOfCode.Core.Year{{year:D4}}.Day{{day:D2}};
+            namespace AdventOfCode.Core.Solvers.Year{{year:D4}}.Day{{day:D2}};
 
             [PuzzleName("{{puzzleName}}")]
             public sealed class PuzzleSolver : IPuzzleSolver
