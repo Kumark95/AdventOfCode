@@ -29,6 +29,7 @@
         <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0" />
         <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
         <PackageReference Include="Serilog.Sinks.Console" Version="5.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.48.0" />
     </ItemGroup>
 
     <ItemGroup>

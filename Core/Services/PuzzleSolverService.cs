@@ -1,6 +1,7 @@
 using AdventOfCode.Common.Attributes;
 using AdventOfCode.Common.Interfaces;
 using Microsoft.Extensions.Logging;
+using Spectre.Console;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -53,6 +54,14 @@ internal sealed class PuzzleSolverService
             _logger.LogWarning("No input files provided");
         }
 
+        var table = new Table();
+        table.AddColumn("File");
+        table.AddColumn("Expected");
+        table.AddColumn("Value");
+        table.AddColumn("Result");
+        table.AddColumn("Execution time");
+        table.AddColumn("Memory used");
+
         foreach (var input in inputs)
         {
             _logger.LogInformation("Using {Filename}", input.Filename);
@@ -84,12 +93,21 @@ internal sealed class PuzzleSolverService
                 FormatTimeSpan(executionData.ExecutionTime), FormatBytes(executionData.MemoryUsed));
 
 
+            // Results
+            var resultHighlight = resultMatch == "PASS"
+                ? "[green]Ok[/]"
+                : "[red]Fail[/]";
+            table.AddRow(input.Filename, input.ExpectedResult.ToString(), executionData.Result.ToString()!, resultHighlight,
+                FormatTimeSpan(executionData.ExecutionTime), FormatBytes(executionData.MemoryUsed));
+
             if (resultMatch == "FAIL")
             {
                 _logger.LogWarning("Halting further tests as the previous results did not match");
                 break;
             }
         }
+
+        AnsiConsole.Write(table);
     }
 
     private static ExecutionData ExecuteAndMeasure(Func<object> calculation)
