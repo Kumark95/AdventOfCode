@@ -26,6 +26,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
         var stepTarget = 3;
 
+
         var baseRes = Math.Pow(stepTarget + 1, 2);
         Console.WriteLine(baseRes);
 
