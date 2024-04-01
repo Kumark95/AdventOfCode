@@ -25,13 +25,17 @@ internal sealed class PuzzleSolverService
             _logger.LogInformation("Puzzle name: {PuzzleName}", puzzleNameAttribute.Name);
         }
 
+        ConsoleDisplayManager.DisplayHeader();
+
         _logger.LogInformation("Solving Part One");
         var partOneInputs = solverType.GetMethod(nameof(IPuzzleSolver.SolvePartOne))!.GetCustomAttributes<PuzzleInput>();
-        FetchInputsAndSolve(solverDirectory, partOneInputs, solver.SolvePartOne);
+        var partOneResults = FetchInputsAndSolve(solverDirectory, partOneInputs, solver.SolvePartOne);
+        ConsoleDisplayManager.DisplayResults(partOneResults);
 
         _logger.LogInformation("Solving Part Two");
         var partTwoInputs = solverType.GetMethod(nameof(IPuzzleSolver.SolvePartTwo))!.GetCustomAttributes<PuzzleInput>();
-        FetchInputsAndSolve(solverDirectory, partTwoInputs, solver.SolvePartTwo);
+        var partTwoResults = FetchInputsAndSolve(solverDirectory, partTwoInputs, solver.SolvePartTwo);
+        ConsoleDisplayManager.DisplayResults(partTwoResults);
     }
 
     public IPuzzleSolver? FindSolver(int year, int day)
@@ -47,20 +51,12 @@ internal sealed class PuzzleSolverService
         return solvers.SingleOrDefault(s => s.Year == year && s.Day == day);
     }
 
-    private void FetchInputsAndSolve(string solverDirectory, IEnumerable<PuzzleInput> inputs, Func<string[], object> solverMethod)
+    private IEnumerable<ExecutionResult> FetchInputsAndSolve(string solverDirectory, IEnumerable<PuzzleInput> inputs, Func<string[], object> solverMethod)
     {
         if (!inputs.Any())
         {
             _logger.LogWarning("No input files provided");
         }
-
-        var table = new Table();
-        table.AddColumn("File");
-        table.AddColumn("Expected");
-        table.AddColumn("Value");
-        table.AddColumn("Result");
-        table.AddColumn("Execution time");
-        table.AddColumn("Memory used");
 
         foreach (var input in inputs)
         {
@@ -74,43 +70,13 @@ internal sealed class PuzzleSolverService
 
             var inputContent = File.ReadAllLines(inputFilePath);
 
-            var executionData = ExecuteAndMeasure(() => solverMethod(inputContent));
-            if (executionData.Result is null)
-            {
-                _logger.LogInformation("");
-                break;
-            }
+            var (result, executionMetrics) = ExecuteAndMeasure(() => solverMethod(inputContent));
 
-            // Converting both to the same type to ensure that the equality does not faile with ints/longs
-            var resultMatch = Convert.ToUInt64(executionData.Result) == input.ExpectedResult
-                ? "PASS"
-                : "FAIL";
-
-            _logger.LogInformation("Result: {Result} | Expected result: {ExpectedResult} ({ResultMatch}) | Execution time: {ExecutionTime} | Memory used: {MemoryUsed}",
-                executionData.Result,
-                input.ExpectedResult,
-                resultMatch,
-                FormatTimeSpan(executionData.ExecutionTime), FormatBytes(executionData.MemoryUsed));
-
-
-            // Results
-            var resultHighlight = resultMatch == "PASS"
-                ? "[green]Ok[/]"
-                : "[red]Fail[/]";
-            table.AddRow(input.Filename, input.ExpectedResult.ToString(), executionData.Result.ToString()!, resultHighlight,
-                FormatTimeSpan(executionData.ExecutionTime), FormatBytes(executionData.MemoryUsed));
-
-            if (resultMatch == "FAIL")
-            {
-                _logger.LogWarning("Halting further tests as the previous results did not match");
-                break;
-            }
+            yield return new ExecutionResult(input.Filename, input.ExpectedResult, result, executionMetrics);
         }
-
-        AnsiConsole.Write(table);
     }
 
-    private static ExecutionData ExecuteAndMeasure(Func<object> calculation)
+    private static (ulong, ExecutionMetrics) ExecuteAndMeasure(Func<object> calculation)
     {
         var startMemory = 0L;
         using (Process proc = Process.GetCurrentProcess())
@@ -132,32 +98,6 @@ internal sealed class PuzzleSolverService
             memoryUsed = 0;
         }
 
-        return new ExecutionData(result, elapsed, memoryUsed);
-    }
-
-    private static string FormatTimeSpan(TimeSpan elapsed)
-    {
-        return elapsed.Minutes > 0
-                ? $"{elapsed.Minutes}m {elapsed.Seconds}s {elapsed.Milliseconds}ms {elapsed.Microseconds}μs"
-                : $"{elapsed.Seconds}s {elapsed.Milliseconds}ms {elapsed.Microseconds}μs";
-    }
-
-    private static string FormatBytes(long bytes)
-    {
-        const int scale = 1024;
-        string[] orders = ["GB", "MB", "KB", "Bytes"];
-        long max = (long)Math.Pow(scale, orders.Length - 1);
-
-        foreach (string order in orders)
-        {
-            if (bytes > max)
-            {
-                return string.Format("{0:##.##} {1}", decimal.Divide(bytes, max), order);
-            }
-
-            max /= scale;
-        }
-
-        return "0 Bytes";
+        return (Convert.ToUInt64(result), new ExecutionMetrics(elapsed, memoryUsed));
     }
 }

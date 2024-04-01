@@ -56,6 +56,8 @@ internal sealed class PuzzleSetupService
                 [PuzzleInput(filename: "input.txt", expectedResult: 999_999_999_999)]
                 public object SolvePartOne(string[] inputLines)
                 {
+                    var input = InputParser.ParseInput(inputLines);
+
                     return 0;
                 }
 
