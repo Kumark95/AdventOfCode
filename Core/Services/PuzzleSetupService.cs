@@ -75,7 +75,7 @@ internal sealed class PuzzleSetupService
     private static string GenerateParser(int year, int day)
     {
         return $$"""
-            namespace AdventOfCode.Core.Year{{year:D4}}.Day{{day:D2}}.Model;
+            namespace AdventOfCode.Core.Solvers.Year{{year:D4}}.Day{{day:D2}}.Model;
 
             internal static class InputParser
             {
