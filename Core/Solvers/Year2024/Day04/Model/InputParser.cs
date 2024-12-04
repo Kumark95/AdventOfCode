@@ -1,4 +1,4 @@
-namespace AdventOfCode.Core.Solvers.Year2024.Day03.Model;
+namespace AdventOfCode.Core.Solvers.Year2024.Day04.Model;
 
 internal static class InputParser
 {
