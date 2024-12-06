@@ -19,7 +19,9 @@ public sealed class PuzzleSolver : IPuzzleSolver
         var result = 0;
         foreach (var page in pages)
         {
-            if (IsValid(page, instructions))
+            // The page is invalid if it had to be fixed
+            var wasFixed = FixPage(page, instructions, out var _);
+            if (!wasFixed)
             {
                 result += page[page.Count / 2];
             }
@@ -37,49 +39,20 @@ public sealed class PuzzleSolver : IPuzzleSolver
         var result = 0;
         foreach (var page in pages)
         {
-            if (IsValid(page, instructions))
+            var wasFixed = FixPage(page, instructions, out var fixedPage);
+            if (wasFixed)
             {
-                continue;
+                result += fixedPage[fixedPage.Count / 2];
             }
-
-            var fixedPage = FixPage(page, instructions);
-            result += fixedPage[fixedPage.Count / 2];
         }
 
         return result;
     }
 
-    private static bool IsValid(List<int> page, Dictionary<int, HashSet<int>> instructions)
+    private static bool FixPage(List<int> page, Dictionary<int, HashSet<int>> instructions, out List<int> fixedPage)
     {
-        for (int i = 0; i < page.Count; i++)
-        {
-            var number = page[i];
-            var afterNumbers = instructions.TryGetValue(number, out HashSet<int>? set)
-                ? set
-                : [];
-
-            // Check all the other numbers in the page
-            for (var j = 0; j < page.Count; j++)
-            {
-                if (i == j)
-                {
-                    continue;
-                }
-
-                var testNumber = page[j];
-                if (afterNumbers.Contains(testNumber) && j < i)
-                {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-    private static List<int> FixPage(List<int> page, Dictionary<int, HashSet<int>> instructions)
-    {
-        var fixedPage = new List<int>(page);
+        fixedPage = new List<int>(page);
+        bool wasModified = false;
 
         bool shouldReevaluate;
         do
@@ -87,8 +60,8 @@ public sealed class PuzzleSolver : IPuzzleSolver
             shouldReevaluate = false;
             for (int i = 0; i < fixedPage.Count; i++)
             {
-                var number = fixedPage[i];
-                var afterNumbers = instructions.TryGetValue(number, out HashSet<int>? set)
+                var currentNumber = fixedPage[i];
+                var mustFollowNumbers = instructions.TryGetValue(currentNumber, out HashSet<int>? set)
                     ? set
                     : [];
 
@@ -100,14 +73,15 @@ public sealed class PuzzleSolver : IPuzzleSolver
                         continue;
                     }
 
-                    var testNumber = fixedPage[j];
-                    if (afterNumbers.Contains(testNumber) && j < i)
+                    var comparisonNumber = fixedPage[j];
+                    if (mustFollowNumbers.Contains(comparisonNumber) && j < i)
                     {
                         // Swap numbers
-                        fixedPage[j] = number;
-                        fixedPage[i] = testNumber;
+                        fixedPage[j] = currentNumber;
+                        fixedPage[i] = comparisonNumber;
 
                         shouldReevaluate = true;
+                        wasModified = true;
 
                         break;
                     }
@@ -116,6 +90,6 @@ public sealed class PuzzleSolver : IPuzzleSolver
 
         } while (shouldReevaluate);
 
-        return fixedPage;
+        return wasModified;
     }
 }
