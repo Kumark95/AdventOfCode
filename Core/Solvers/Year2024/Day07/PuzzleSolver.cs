@@ -77,20 +77,26 @@ public sealed class PuzzleSolver : IPuzzleSolver
                 continue;
             }
 
-            var newSumNumbers = new List<long>(tempNumbers);
-            newSumNumbers[0] = sumResult;
-            queue.Enqueue(newSumNumbers);
+            // Break early when the partial result exceeds the test value
+            if (sumResult <= testValue)
+            {
+                var newSumNumbers = new List<long>(tempNumbers);
+                newSumNumbers[0] = sumResult;
+                queue.Enqueue(newSumNumbers);
+            }
 
-            var newMultNumbers = new List<long>(tempNumbers);
-            newMultNumbers[0] = multiplyResult;
-            queue.Enqueue(newMultNumbers);
+            if (multiplyResult <= testValue)
+            {
+                var newMultNumbers = new List<long>(tempNumbers);
+                newMultNumbers[0] = multiplyResult;
+                queue.Enqueue(newMultNumbers);
+            }
 
-            if (useConcatenation)
+            if (useConcatenation && concatenatedResult <= testValue)
             {
                 var newConcatNumbers = new List<long>(tempNumbers);
                 newConcatNumbers[0] = concatenatedResult;
                 queue.Enqueue(newConcatNumbers);
-
             }
         }
 
