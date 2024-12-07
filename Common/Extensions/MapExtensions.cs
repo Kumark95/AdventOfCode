@@ -23,6 +23,16 @@ public static class MapExtensions
             && position.Col < map.GetLength(1);
     }
 
+    public static T GetValueAt<T>(this T[,] map, Position position)
+    {
+        return map[position.Row, position.Col];
+    }
+
+    public static void SetValueAt<T>(this T[,] map, Position position, T value)
+    {
+        map[position.Row, position.Col] = value;
+    }
+
     public static Position Move<T>(this T[,] _, Position position, Direction direction)
     {
         return direction switch
@@ -111,6 +121,45 @@ public static class MapExtensions
         {
             yield return new Position(row, 0);
             yield return new Position(row, colLength - 1);
+        }
+    }
+
+    public static T[,] DeepClone<T>(this T[,] map)
+    {
+        var clone = new T[map.GetLength(0), map.GetLength(1)];
+
+        for (int row = 0; row < map.GetLength(0); row++)
+        {
+            for (int col = 0; col < map.GetLength(1); col++)
+            {
+                clone[row, col] = map[row, col];
+            }
+        }
+
+        return clone;
+    }
+
+    public static void Print<T>(this T[,] map, Dictionary<T, ConsoleColor> colors)
+    {
+        for (int row = 0; row < map.RowLength(); row++)
+        {
+            for (int col = 0; col < map.ColLength(); col++)
+            {
+                var character = map[row, col];
+
+                if (colors.TryGetValue(character, out ConsoleColor color))
+                {
+                    Console.ForegroundColor = color;
+                    Console.Write(character);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.Write(character);
+                }
+            }
+
+            Console.WriteLine();
         }
     }
 }
