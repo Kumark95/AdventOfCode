@@ -48,8 +48,7 @@ public sealed class PuzzleSolver : IPuzzleSolver
     {
         var numbers = ParseNumbers(inputLines[0]);
 
-        const int EMPTY = -1;
-        (int[] memoryField, Stack<FileInfo> fileRanges, List<RangeInfo> emptyRanges) = GenerateField(numbers, emptyNum: EMPTY);
+        (int[] memoryField, Stack<FileInfo> fileRanges, List<RangeInfo> emptyRanges) = GenerateField(numbers);
 
         while (fileRanges.Count > 0)
         {
