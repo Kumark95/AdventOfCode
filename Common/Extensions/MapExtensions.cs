@@ -139,7 +139,7 @@ public static class MapExtensions
         return clone;
     }
 
-    public static void Print<T>(this T[,] map, Dictionary<T, ConsoleColor> colors)
+    public static void Print<T>(this T[,] map, Dictionary<T, ConsoleColor> colors) where T : notnull
     {
         for (int row = 0; row < map.RowLength(); row++)
         {
@@ -150,6 +150,30 @@ public static class MapExtensions
                 if (colors.TryGetValue(character, out ConsoleColor color))
                 {
                     Console.ForegroundColor = color;
+                    Console.Write(character);
+                    Console.ForegroundColor = ConsoleColor.White;
+                }
+                else
+                {
+                    Console.Write(character);
+                }
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    public static void Print<T>(this T[,] map, HashSet<Position> coloredPositions)
+    {
+        for (int row = 0; row < map.RowLength(); row++)
+        {
+            for (int col = 0; col < map.ColLength(); col++)
+            {
+                var character = map[row, col];
+
+                if (coloredPositions.Contains(new Position(row, col)))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write(character);
                     Console.ForegroundColor = ConsoleColor.White;
                 }
