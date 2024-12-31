@@ -45,21 +45,29 @@ public static class MapExtensions
         };
     }
 
+    public static (int[] RowDirections, int[] ColDirections) GetDirections(MapConnectivity connectivity)
+    {
+        return connectivity switch
+        {
+            MapConnectivity.Diagonals => (
+                [-1, -1, 1, 1],
+                [-1, 1, -1, 1]
+            ),
+            MapConnectivity.FourConnected => (
+                [-1, 0, 1, 0],
+                [0, 1, 0, -1]
+            ),
+            MapConnectivity.EightConnected => (
+                [-1, 0, 1, 0, -1, 1, -1, 1],
+                [0, 1, 0, -1, -1, -1, 1, 1]
+            ),
+            _ => throw new InvalidOperationException()
+        };
+    }
+
     public static IEnumerable<(Position Position, T Value)> GetAllNeighbours<T>(this T[,] map, int row, int col, MapConnectivity connectivity)
     {
-        int[] rowDirection;
-        int[] colDirection;
-
-        if (connectivity == MapConnectivity.EightConnected)
-        {
-            rowDirection = [-1, 0, 1, 0, -1, 1, -1, 1];
-            colDirection = [0, 1, 0, -1, -1, -1, 1, 1];
-        }
-        else
-        {
-            rowDirection = [-1, 0, 1, 0];
-            colDirection = [0, 1, 0, -1];
-        }
+        (int[] rowDirection, int[] colDirection) = GetDirections(connectivity);
 
         for (int i = 0; i < rowDirection.Length; i++)
         {
