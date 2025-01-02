@@ -2,7 +2,7 @@
   "profiles": {
     "AdventOfCode.Core": {
       "commandName": "Project",
-      "commandLineArgs": "2024 14"
+      "commandLineArgs": "2024 15"
     }
   }
 }

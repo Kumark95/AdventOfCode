@@ -7,6 +7,8 @@ public readonly record struct Position(long Row, long Col)
     public static Position operator -(Position a, Position b) => new(a.Row - b.Row, a.Col - b.Col);
     public static Position operator -(Position a, long b) => new(a.Row - b, a.Col - b);
     public static Position operator *(Position a, long b) => new(a.Row * b, a.Col * b);
+    public static bool operator <(Position a, Position b) => a.Row < b.Row && a.Col < b.Col;
+    public static bool operator >(Position a, Position b) => a.Row > b.Row && a.Col > b.Col;
 
     public long ManhattanDistance(Position target)
     {
